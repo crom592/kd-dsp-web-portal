@@ -112,7 +112,7 @@ const DashboardPage: React.FC = () => {
         <Grid item xs={12} sm={6} md={3}>
           <StatCard
             title="Total Vehicles"
-            value={stats.totalVehicles}
+            value={stats.totalVehicles ?? 0}
             icon={<DirectionsBus />}
             color="#1976d2"
             trend="+3 this month"
@@ -121,7 +121,7 @@ const DashboardPage: React.FC = () => {
         <Grid item xs={12} sm={6} md={3}>
           <StatCard
             title="Active Vehicles"
-            value={stats.activeVehicles}
+            value={stats.activeVehicles ?? 0}
             icon={<Speed />}
             color="#2e7d32"
             trend="84% utilization"
@@ -130,7 +130,7 @@ const DashboardPage: React.FC = () => {
         <Grid item xs={12} sm={6} md={3}>
           <StatCard
             title="Active Routes"
-            value={`${stats.activeRoutes}/${stats.totalRoutes}`}
+            value={`${stats.activeRoutes ?? 0}/${stats.totalRoutes ?? 0}`}
             icon={<Route />}
             color="#ed6c02"
           />
@@ -138,7 +138,7 @@ const DashboardPage: React.FC = () => {
         <Grid item xs={12} sm={6} md={3}>
           <StatCard
             title="Today's Reservations"
-            value={stats.todayReservations}
+            value={stats.todayReservations ?? 0}
             icon={<EventNote />}
             color="#9c27b0"
             trend="+12% vs yesterday"
@@ -191,7 +191,7 @@ const DashboardPage: React.FC = () => {
                   <Typography variant="body2">Total Riders</Typography>
                 </Box>
                 <Typography variant="subtitle1" fontWeight={600}>
-                  {stats.totalRiders.toLocaleString()}
+                  {(stats.totalRiders ?? 0).toLocaleString()}
                 </Typography>
               </Box>
 
@@ -210,7 +210,7 @@ const DashboardPage: React.FC = () => {
                   <Typography variant="body2">Avg. Occupancy</Typography>
                 </Box>
                 <Typography variant="subtitle1" fontWeight={600}>
-                  {stats.averageOccupancy}%
+                  {stats.averageOccupancy ?? 0}%
                 </Typography>
               </Box>
 
