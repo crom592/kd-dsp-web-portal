@@ -40,11 +40,11 @@ export const useAuth = () => {
   );
 
   const isAdmin = useCallback((): boolean => {
-    return user?.role === 'SYSTEM_ADMIN';
+    return user?.role === 'KD_OPERATOR';
   }, [user]);
 
   const isCompanyAdmin = useCallback((): boolean => {
-    return user?.role === 'COMPANY_ADMIN' || user?.role === 'SYSTEM_ADMIN';
+    return user?.role === 'COMPANY_ADMIN' || user?.role === 'KD_OPERATOR';
   }, [user]);
 
   return {

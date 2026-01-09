@@ -9,17 +9,16 @@ import { format } from 'date-fns';
 
 const ReservationsListPage: React.FC = () => {
   const navigate = useNavigate();
-  const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(20);
+  const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 20 });
   const [statusFilter, setStatusFilter] = useState<string>('');
   const [dateFilter, setDateFilter] = useState<string>('');
 
   const { data, isLoading } = useQuery({
-    queryKey: ['reservations', page, pageSize, statusFilter, dateFilter],
+    queryKey: ['reservations', paginationModel.page, paginationModel.pageSize, statusFilter, dateFilter],
     queryFn: () =>
       reservationsService.getReservations({
-        page: page + 1,
-        limit: pageSize,
+        page: paginationModel.page + 1,
+        limit: paginationModel.pageSize,
         status: statusFilter || undefined,
         date: dateFilter || undefined,
       }),
@@ -36,14 +35,14 @@ const ReservationsListPage: React.FC = () => {
       headerName: '사용자',
       flex: 1,
       minWidth: 150,
-      valueGetter: (value, row) => row.user?.name || '-',
+      valueGetter: (_value, row) => row.user?.name || '-',
     },
     {
       field: 'route',
       headerName: '노선',
       flex: 1,
       minWidth: 150,
-      valueGetter: (value, row) => row.route?.name || '-',
+      valueGetter: (_value, row) => row.route?.name || '-',
     },
     {
       field: 'reservationDate',
@@ -56,14 +55,14 @@ const ReservationsListPage: React.FC = () => {
       headerName: '탑승 정류장',
       flex: 1,
       minWidth: 150,
-      valueGetter: (value, row) => row.boardingStop?.name || '-',
+      valueGetter: (_value, row) => row.boardingStop?.name || '-',
     },
     {
       field: 'alightingStop',
       headerName: '하차 정류장',
       flex: 1,
       minWidth: 150,
-      valueGetter: (value, row) => row.alightingStop?.name || '-',
+      valueGetter: (_value, row) => row.alightingStop?.name || '-',
     },
     {
       field: 'status',
@@ -123,10 +122,8 @@ const ReservationsListPage: React.FC = () => {
           loading={isLoading}
           paginationMode="server"
           rowCount={data?.meta.total || 0}
-          page={page}
-          pageSize={pageSize}
-          onPageChange={setPage}
-          onPageSizeChange={setPageSize}
+          paginationModel={paginationModel}
+          onPaginationModelChange={setPaginationModel}
           pageSizeOptions={[10, 20, 50]}
           onRowClick={(params) => navigate(`/reservations/${params.id}`)}
           sx={{ cursor: 'pointer' }}

@@ -6,6 +6,7 @@ import {
   CardContent,
   Typography,
   Paper,
+  CircularProgress,
 } from '@mui/material';
 import {
   DirectionsBus,
@@ -15,8 +16,10 @@ import {
   TrendingUp,
   Speed,
 } from '@mui/icons-material';
+import { useQuery } from '@tanstack/react-query';
 import { useAppSelector } from '@/store';
 import { ROLE_DISPLAY_NAMES } from '@/constants';
+import { dashboardService } from '@/services/dashboardService';
 
 interface StatCardProps {
   title: string;
@@ -71,16 +74,26 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, icon, color, trend })
 const DashboardPage: React.FC = () => {
   const { user } = useAppSelector((state) => state.auth);
 
-  // Mock data - will be replaced with real API calls
-  const stats = {
-    totalVehicles: 45,
-    activeVehicles: 38,
-    totalRoutes: 12,
-    activeRoutes: 10,
-    totalRiders: 1250,
-    todayReservations: 342,
-    averageOccupancy: 78,
-  };
+  const { data: stats, isLoading, error } = useQuery({
+    queryKey: ['dashboard-stats'],
+    queryFn: dashboardService.getStats,
+  });
+
+  if (isLoading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (error || !stats) {
+    return (
+      <Box sx={{ p: 3 }}>
+        <Typography color="error">데이터를 불러오는데 실패했습니다.</Typography>
+      </Box>
+    );
+  }
 
   return (
     <Box>

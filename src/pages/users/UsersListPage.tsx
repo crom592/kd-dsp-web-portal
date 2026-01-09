@@ -4,67 +4,72 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { useQuery } from '@tanstack/react-query';
 import { Add } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-import { driversService } from '@/services/driversService';
-import { Driver } from '@/types';
-import { format } from 'date-fns';
+import { usersService } from '@/services/usersService';
+import { User, UserRole } from '@/types';
+import { ROLE_DISPLAY_NAMES } from '@/constants';
 
-const DriversListPage: React.FC = () => {
+const UsersListPage: React.FC = () => {
   const navigate = useNavigate();
   const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 20 });
-  const [statusFilter, setStatusFilter] = useState<string>('');
+  const [roleFilter, setRoleFilter] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
   const { data, isLoading } = useQuery({
-    queryKey: ['drivers', paginationModel.page, paginationModel.pageSize, statusFilter, searchQuery],
+    queryKey: ['users', paginationModel.page, paginationModel.pageSize, roleFilter, searchQuery],
     queryFn: () =>
-      driversService.getDrivers({
+      usersService.getUsers({
         page: paginationModel.page + 1,
         limit: paginationModel.pageSize,
-        status: statusFilter || undefined,
+        role: roleFilter || undefined,
         search: searchQuery || undefined,
       }),
   });
 
-  const columns: GridColDef<Driver>[] = [
+  const columns: GridColDef<User>[] = [
     {
-      field: 'user',
+      field: 'name',
       headerName: '이름',
       flex: 1,
       minWidth: 150,
-      valueGetter: (_value, row) => row.user?.name || '-',
+    },
+    {
+      field: 'email',
+      headerName: '이메일',
+      flex: 1,
+      minWidth: 200,
     },
     {
       field: 'phone',
       headerName: '전화번호',
       flex: 1,
       minWidth: 150,
-      valueGetter: (_value, row) => row.user?.phone || '-',
     },
     {
-      field: 'licenseNumber',
-      headerName: '면허번호',
+      field: 'role',
+      headerName: '역할',
+      width: 150,
+      renderCell: (params) => {
+        const roleColors: Record<UserRole, 'primary' | 'secondary' | 'success' | 'warning'> = {
+          RIDER: 'primary',
+          DRIVER: 'secondary',
+          COMPANY_ADMIN: 'warning',
+          KD_OPERATOR: 'success',
+        };
+        return (
+          <Chip
+            label={ROLE_DISPLAY_NAMES[params.value as UserRole]}
+            size="small"
+            color={roleColors[params.value as UserRole]}
+          />
+        );
+      },
+    },
+    {
+      field: 'company',
+      headerName: '소속 기업',
       flex: 1,
       minWidth: 150,
-    },
-    {
-      field: 'licenseExpiry',
-      headerName: '면허 만료일',
-      width: 120,
-      valueGetter: (value) => format(new Date(value), 'yyyy-MM-dd'),
-    },
-    {
-      field: 'status',
-      headerName: '상태',
-      width: 120,
-      renderCell: (params) => {
-        const statusMap = {
-          AVAILABLE: { label: '대기중', color: 'success' as const },
-          ON_DUTY: { label: '근무중', color: 'primary' as const },
-          OFF_DUTY: { label: '비근무', color: 'default' as const },
-        };
-        const status = statusMap[params.value as keyof typeof statusMap];
-        return <Chip label={status.label} size="small" color={status.color} />;
-      },
+      valueGetter: (_value, row) => row.company?.name || '-',
     },
   ];
 
@@ -72,32 +77,33 @@ const DriversListPage: React.FC = () => {
     <Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
         <Typography variant="h4" fontWeight={700}>
-          기사 관리
+          사용자 관리
         </Typography>
-        <Button variant="contained" startIcon={<Add />} onClick={() => navigate('/drivers/new')}>
-          기사 추가
+        <Button variant="contained" startIcon={<Add />} onClick={() => navigate('/users/new')}>
+          사용자 추가
         </Button>
       </Box>
 
       <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
         <TextField
           label="검색"
-          placeholder="이름 또는 면허번호 검색"
+          placeholder="이름 또는 이메일 검색"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           sx={{ minWidth: 300 }}
         />
         <TextField
           select
-          label="상태"
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
+          label="역할"
+          value={roleFilter}
+          onChange={(e) => setRoleFilter(e.target.value)}
           sx={{ minWidth: 150 }}
         >
           <MenuItem value="">전체</MenuItem>
-          <MenuItem value="AVAILABLE">대기중</MenuItem>
-          <MenuItem value="ON_DUTY">근무중</MenuItem>
-          <MenuItem value="OFF_DUTY">비근무</MenuItem>
+          <MenuItem value="RIDER">탑승자</MenuItem>
+          <MenuItem value="DRIVER">운전자</MenuItem>
+          <MenuItem value="COMPANY_ADMIN">기업 관리자</MenuItem>
+          <MenuItem value="KD_OPERATOR">KD 운영자</MenuItem>
         </TextField>
       </Box>
 
@@ -111,7 +117,7 @@ const DriversListPage: React.FC = () => {
           paginationModel={paginationModel}
           onPaginationModelChange={setPaginationModel}
           pageSizeOptions={[10, 20, 50]}
-          onRowClick={(params) => navigate(`/drivers/${params.id}/edit`)}
+          onRowClick={(params) => navigate(`/users/${params.id}/edit`)}
           sx={{ cursor: 'pointer' }}
         />
       </Paper>
@@ -119,4 +125,4 @@ const DriversListPage: React.FC = () => {
   );
 };
 
-export default DriversListPage;
+export default UsersListPage;

@@ -54,13 +54,13 @@ const navItems: NavItem[] = [
     label: 'Vehicles',
     path: ROUTES.VEHICLES,
     icon: <VehicleIcon />,
-    roles: [UserRole.SYSTEM_ADMIN],
+    roles: [UserRole.KD_OPERATOR],
   },
   {
     label: 'Users',
     path: ROUTES.USERS,
     icon: <UsersIcon />,
-    roles: [UserRole.SYSTEM_ADMIN, UserRole.COMPANY_ADMIN],
+    roles: [UserRole.KD_OPERATOR, UserRole.COMPANY_ADMIN],
   },
   {
     label: 'Analytics',
@@ -71,7 +71,7 @@ const navItems: NavItem[] = [
     label: 'Billing',
     path: ROUTES.BILLING,
     icon: <BillingIcon />,
-    roles: [UserRole.SYSTEM_ADMIN, UserRole.COMPANY_ADMIN],
+    roles: [UserRole.KD_OPERATOR, UserRole.COMPANY_ADMIN],
   },
 ];
 

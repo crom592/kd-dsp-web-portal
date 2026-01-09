@@ -9,17 +9,16 @@ import { Vehicle } from '@/types';
 
 const VehiclesListPage: React.FC = () => {
   const navigate = useNavigate();
-  const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(20);
+  const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 20 });
   const [statusFilter, setStatusFilter] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
   const { data, isLoading } = useQuery({
-    queryKey: ['vehicles', page, pageSize, statusFilter, searchQuery],
+    queryKey: ['vehicles', paginationModel.page, paginationModel.pageSize, statusFilter, searchQuery],
     queryFn: () =>
       vehiclesService.getVehicles({
-        page: page + 1,
-        limit: pageSize,
+        page: paginationModel.page + 1,
+        limit: paginationModel.pageSize,
         status: statusFilter || undefined,
         search: searchQuery || undefined,
       }),
@@ -63,7 +62,7 @@ const VehiclesListPage: React.FC = () => {
       headerName: '배정 기사',
       flex: 1,
       minWidth: 150,
-      valueGetter: (value, row) => row.driver?.user?.name || '-',
+      valueGetter: (_value, row) => row.driver?.user?.name || '-',
     },
   ];
 
@@ -108,10 +107,8 @@ const VehiclesListPage: React.FC = () => {
           loading={isLoading}
           paginationMode="server"
           rowCount={data?.meta.total || 0}
-          page={page}
-          pageSize={pageSize}
-          onPageChange={setPage}
-          onPageSizeChange={setPageSize}
+          paginationModel={paginationModel}
+          onPaginationModelChange={setPaginationModel}
           pageSizeOptions={[10, 20, 50]}
           onRowClick={(params) => navigate(`/vehicles/${params.id}/edit`)}
           sx={{ cursor: 'pointer' }}

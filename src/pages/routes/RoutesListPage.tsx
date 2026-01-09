@@ -9,17 +9,16 @@ import { Route } from '@/types';
 
 const RoutesListPage: React.FC = () => {
   const navigate = useNavigate();
-  const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(20);
+  const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 20 });
   const [statusFilter, setStatusFilter] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
   const { data, isLoading } = useQuery({
-    queryKey: ['routes', page, pageSize, statusFilter, searchQuery],
+    queryKey: ['routes', paginationModel.page, paginationModel.pageSize, statusFilter, searchQuery],
     queryFn: () =>
       routesService.getRoutes({
-        page: page + 1,
-        limit: pageSize,
+        page: paginationModel.page + 1,
+        limit: paginationModel.pageSize,
         status: statusFilter || undefined,
         search: searchQuery || undefined,
       }),
@@ -68,13 +67,13 @@ const RoutesListPage: React.FC = () => {
       headerName: '기업',
       flex: 1,
       minWidth: 150,
-      valueGetter: (params) => params.row.company?.name || '-',
+      valueGetter: (_value, row) => row.company?.name || '-',
     },
     {
       field: 'stops',
       headerName: '정류장 수',
       width: 100,
-      valueGetter: (params) => params.row.stops?.length || 0,
+      valueGetter: (_value, row) => row.stops?.length || 0,
     },
   ];
 
@@ -118,10 +117,8 @@ const RoutesListPage: React.FC = () => {
           loading={isLoading}
           paginationMode="server"
           rowCount={data?.meta.total || 0}
-          page={page}
-          pageSize={pageSize}
-          onPageChange={setPage}
-          onPageSizeChange={setPageSize}
+          paginationModel={paginationModel}
+          onPaginationModelChange={setPaginationModel}
           pageSizeOptions={[10, 20, 50]}
           onRowClick={(params) => navigate(`/routes/${params.id}`)}
           sx={{ cursor: 'pointer' }}
