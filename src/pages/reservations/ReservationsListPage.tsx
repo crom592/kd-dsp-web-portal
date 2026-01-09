@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Typography, Paper, Chip, TextField, MenuItem } from '@mui/material';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { reservationsService } from '@/services/reservationsService';
@@ -35,40 +35,40 @@ const ReservationsListPage: React.FC = () => {
       headerName: '사용자',
       flex: 1,
       minWidth: 150,
-      valueGetter: (_value, row) => row.user?.name || '-',
+      valueGetter: (_value: unknown, row: Reservation) => row.user?.name || '-',
     },
     {
       field: 'route',
       headerName: '노선',
       flex: 1,
       minWidth: 150,
-      valueGetter: (_value, row) => row.route?.name || '-',
+      valueGetter: (_value: unknown, row: Reservation) => row.route?.name || '-',
     },
     {
       field: 'reservationDate',
       headerName: '예약일',
       width: 120,
-      valueGetter: (value) => format(new Date(value), 'yyyy-MM-dd'),
+      valueGetter: (value: string) => format(new Date(value), 'yyyy-MM-dd'),
     },
     {
       field: 'boardingStop',
       headerName: '탑승 정류장',
       flex: 1,
       minWidth: 150,
-      valueGetter: (_value, row) => row.boardingStop?.name || '-',
+      valueGetter: (_value: unknown, row: Reservation) => row.boardingStop?.name || '-',
     },
     {
       field: 'alightingStop',
       headerName: '하차 정류장',
       flex: 1,
       minWidth: 150,
-      valueGetter: (_value, row) => row.alightingStop?.name || '-',
+      valueGetter: (_value: unknown, row: Reservation) => row.alightingStop?.name || '-',
     },
     {
       field: 'status',
       headerName: '상태',
       width: 120,
-      renderCell: (params) => {
+      renderCell: (params: GridRenderCellParams<Reservation, string>) => {
         const statusMap = {
           PENDING: { label: '대기', color: 'warning' as const },
           CONFIRMED: { label: '확정', color: 'success' as const },
@@ -125,7 +125,7 @@ const ReservationsListPage: React.FC = () => {
           paginationModel={paginationModel}
           onPaginationModelChange={setPaginationModel}
           pageSizeOptions={[10, 20, 50]}
-          onRowClick={(params) => navigate(`/reservations/${params.id}`)}
+          onRowClick={(params: { id: string | number }) => navigate(`/reservations/${params.id}`)}
           sx={{ cursor: 'pointer' }}
         />
       </Paper>

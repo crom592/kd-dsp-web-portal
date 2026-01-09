@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Typography, Button, Paper, Chip, TextField, MenuItem } from '@mui/material';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { useQuery } from '@tanstack/react-query';
 import { Add } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
@@ -34,14 +34,14 @@ const InvoicesListPage: React.FC = () => {
       headerName: '기업',
       flex: 1,
       minWidth: 200,
-      valueGetter: (_value, row) => row.company?.name || '-',
+      valueGetter: (_value: unknown, row: Invoice) => row.company?.name || '-',
     },
     {
       field: 'billingPeriodStart',
       headerName: '청구 기간',
       flex: 1,
       minWidth: 200,
-      valueGetter: (_value, row) => {
+      valueGetter: (_value: unknown, row: Invoice) => {
         const start = format(new Date(row.billingPeriodStart), 'yyyy-MM-dd');
         const end = format(new Date(row.billingPeriodEnd), 'yyyy-MM-dd');
         return `${start} ~ ${end}`;
@@ -51,19 +51,19 @@ const InvoicesListPage: React.FC = () => {
       field: 'amount',
       headerName: '금액',
       width: 150,
-      valueGetter: (value) => `₩${value.toLocaleString()}`,
+      valueGetter: (value: number) => `₩${value.toLocaleString()}`,
     },
     {
       field: 'dueDate',
       headerName: '납부 기한',
       width: 120,
-      valueGetter: (value) => format(new Date(value), 'yyyy-MM-dd'),
+      valueGetter: (value: string) => format(new Date(value), 'yyyy-MM-dd'),
     },
     {
       field: 'status',
       headerName: '상태',
       width: 120,
-      renderCell: (params) => {
+      renderCell: (params: GridRenderCellParams<Invoice, string>) => {
         const statusMap = {
           PENDING: { label: '대기', color: 'warning' as const },
           PAID: { label: '완료', color: 'success' as const },
@@ -113,7 +113,7 @@ const InvoicesListPage: React.FC = () => {
           paginationModel={paginationModel}
           onPaginationModelChange={setPaginationModel}
           pageSizeOptions={[10, 20, 50]}
-          onRowClick={(params) => navigate(`/billing/invoices/${params.id}`)}
+          onRowClick={(params: { id: string | number }) => navigate(`/billing/invoices/${params.id}`)}
           sx={{ cursor: 'pointer' }}
         />
       </Paper>

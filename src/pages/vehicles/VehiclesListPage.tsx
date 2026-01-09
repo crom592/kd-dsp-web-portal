@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Typography, Button, Paper, Chip, TextField, MenuItem } from '@mui/material';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { useQuery } from '@tanstack/react-query';
 import { Add } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
@@ -40,13 +40,13 @@ const VehiclesListPage: React.FC = () => {
       field: 'capacity',
       headerName: '정원',
       width: 100,
-      valueGetter: (value) => `${value}명`,
+      valueGetter: (value: number) => `${value}명`,
     },
     {
       field: 'status',
       headerName: '상태',
       width: 120,
-      renderCell: (params) => {
+      renderCell: (params: GridRenderCellParams<Vehicle, string>) => {
         const statusMap = {
           AVAILABLE: { label: '대기중', color: 'success' as const },
           IN_SERVICE: { label: '운행중', color: 'primary' as const },
@@ -62,7 +62,7 @@ const VehiclesListPage: React.FC = () => {
       headerName: '배정 기사',
       flex: 1,
       minWidth: 150,
-      valueGetter: (_value, row) => row.driver?.user?.name || '-',
+      valueGetter: (_value: unknown, row: Vehicle) => row.driver?.user?.name || '-',
     },
   ];
 
@@ -110,7 +110,7 @@ const VehiclesListPage: React.FC = () => {
           paginationModel={paginationModel}
           onPaginationModelChange={setPaginationModel}
           pageSizeOptions={[10, 20, 50]}
-          onRowClick={(params) => navigate(`/vehicles/${params.id}/edit`)}
+          onRowClick={(params: { id: string | number }) => navigate(`/vehicles/${params.id}/edit`)}
           sx={{ cursor: 'pointer' }}
         />
       </Paper>

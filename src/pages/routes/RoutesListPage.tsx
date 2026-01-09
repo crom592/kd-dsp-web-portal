@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Typography, Button, Paper, Chip, TextField, MenuItem } from '@mui/material';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { useQuery } from '@tanstack/react-query';
 import { Add } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
@@ -40,7 +40,7 @@ const RoutesListPage: React.FC = () => {
       field: 'type',
       headerName: '유형',
       width: 120,
-      renderCell: (params) => (
+      renderCell: (params: GridRenderCellParams<Route, string>) => (
         <Chip
           label={params.value === 'COMMUTE' ? '출퇴근' : 'DRT'}
           size="small"
@@ -52,7 +52,7 @@ const RoutesListPage: React.FC = () => {
       field: 'status',
       headerName: '상태',
       width: 120,
-      renderCell: (params) => {
+      renderCell: (params: GridRenderCellParams<Route, string>) => {
         const statusMap = {
           ACTIVE: { label: '운행중', color: 'success' as const },
           INACTIVE: { label: '미운행', color: 'default' as const },
@@ -67,13 +67,13 @@ const RoutesListPage: React.FC = () => {
       headerName: '기업',
       flex: 1,
       minWidth: 150,
-      valueGetter: (_value, row) => row.company?.name || '-',
+      valueGetter: (_value: unknown, row: Route) => row.company?.name || '-',
     },
     {
       field: 'stops',
       headerName: '정류장 수',
       width: 100,
-      valueGetter: (_value, row) => row.stops?.length || 0,
+      valueGetter: (_value: unknown, row: Route) => row.stops?.length || 0,
     },
   ];
 
@@ -120,7 +120,7 @@ const RoutesListPage: React.FC = () => {
           paginationModel={paginationModel}
           onPaginationModelChange={setPaginationModel}
           pageSizeOptions={[10, 20, 50]}
-          onRowClick={(params) => navigate(`/routes/${params.id}`)}
+          onRowClick={(params: { id: string | number }) => navigate(`/routes/${params.id}`)}
           sx={{ cursor: 'pointer' }}
         />
       </Paper>

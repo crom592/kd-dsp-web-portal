@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Typography, Button, Paper, Chip, TextField } from '@mui/material';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { useQuery } from '@tanstack/react-query';
 import { Add } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
@@ -49,7 +49,7 @@ const CompaniesListPage: React.FC = () => {
       field: 'isActive',
       headerName: '상태',
       width: 100,
-      renderCell: (params) => (
+      renderCell: (params: GridRenderCellParams<Company, boolean>) => (
         <Chip
           label={params.value ? '활성' : '비활성'}
           size="small"
@@ -90,7 +90,7 @@ const CompaniesListPage: React.FC = () => {
           paginationModel={paginationModel}
           onPaginationModelChange={setPaginationModel}
           pageSizeOptions={[10, 20, 50]}
-          onRowClick={(params) => navigate(`/companies/${params.id}/edit`)}
+          onRowClick={(params: { id: string | number }) => navigate(`/companies/${params.id}/edit`)}
           sx={{ cursor: 'pointer' }}
         />
       </Paper>

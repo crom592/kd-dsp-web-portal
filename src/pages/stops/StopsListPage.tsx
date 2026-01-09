@@ -83,7 +83,7 @@ const StopsListPage: React.FC = () => {
           paginationModel={paginationModel}
           onPaginationModelChange={setPaginationModel}
           pageSizeOptions={[10, 20, 50]}
-          onRowClick={(params) => navigate(`/stops/${params.id}/edit`)}
+          onRowClick={(params: { id: string | number }) => navigate(`/stops/${params.id}/edit`)}
           sx={{ cursor: 'pointer' }}
         />
       </Paper>

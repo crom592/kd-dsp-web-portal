@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Typography, Button, Paper, Chip, TextField, MenuItem } from '@mui/material';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { useQuery } from '@tanstack/react-query';
 import { Add } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
@@ -31,14 +31,14 @@ const DriversListPage: React.FC = () => {
       headerName: '이름',
       flex: 1,
       minWidth: 150,
-      valueGetter: (_value, row) => row.user?.name || '-',
+      valueGetter: (_value: unknown, row: Driver) => row.user?.name || '-',
     },
     {
       field: 'phone',
       headerName: '전화번호',
       flex: 1,
       minWidth: 150,
-      valueGetter: (_value, row) => row.user?.phone || '-',
+      valueGetter: (_value: unknown, row: Driver) => row.user?.phone || '-',
     },
     {
       field: 'licenseNumber',
@@ -50,13 +50,13 @@ const DriversListPage: React.FC = () => {
       field: 'licenseExpiry',
       headerName: '면허 만료일',
       width: 120,
-      valueGetter: (value) => format(new Date(value), 'yyyy-MM-dd'),
+      valueGetter: (value: string) => format(new Date(value), 'yyyy-MM-dd'),
     },
     {
       field: 'status',
       headerName: '상태',
       width: 120,
-      renderCell: (params) => {
+      renderCell: (params: GridRenderCellParams<Driver, string>) => {
         const statusMap = {
           AVAILABLE: { label: '대기중', color: 'success' as const },
           ON_DUTY: { label: '근무중', color: 'primary' as const },
@@ -111,7 +111,7 @@ const DriversListPage: React.FC = () => {
           paginationModel={paginationModel}
           onPaginationModelChange={setPaginationModel}
           pageSizeOptions={[10, 20, 50]}
-          onRowClick={(params) => navigate(`/drivers/${params.id}/edit`)}
+          onRowClick={(params: { id: string | number }) => navigate(`/drivers/${params.id}/edit`)}
           sx={{ cursor: 'pointer' }}
         />
       </Paper>

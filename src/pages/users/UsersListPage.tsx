@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Typography, Button, Paper, Chip, TextField, MenuItem } from '@mui/material';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { useQuery } from '@tanstack/react-query';
 import { Add } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
@@ -48,7 +48,7 @@ const UsersListPage: React.FC = () => {
       field: 'role',
       headerName: '역할',
       width: 150,
-      renderCell: (params) => {
+      renderCell: (params: GridRenderCellParams<User, UserRole>) => {
         const roleColors: Record<UserRole, 'primary' | 'secondary' | 'success' | 'warning'> = {
           RIDER: 'primary',
           DRIVER: 'secondary',
@@ -69,7 +69,7 @@ const UsersListPage: React.FC = () => {
       headerName: '소속 기업',
       flex: 1,
       minWidth: 150,
-      valueGetter: (_value, row) => row.company?.name || '-',
+      valueGetter: (_value: unknown, row: User) => row.company?.name || '-',
     },
   ];
 
@@ -117,7 +117,7 @@ const UsersListPage: React.FC = () => {
           paginationModel={paginationModel}
           onPaginationModelChange={setPaginationModel}
           pageSizeOptions={[10, 20, 50]}
-          onRowClick={(params) => navigate(`/users/${params.id}/edit`)}
+          onRowClick={(params: { id: string | number }) => navigate(`/users/${params.id}/edit`)}
           sx={{ cursor: 'pointer' }}
         />
       </Paper>
