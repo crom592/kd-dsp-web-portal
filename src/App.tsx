@@ -12,6 +12,13 @@ import VehiclesListPage from '@/pages/vehicles/VehiclesListPage';
 import VehicleFormPage from '@/pages/vehicles/VehicleFormPage';
 import DriversListPage from '@/pages/drivers/DriversListPage';
 import DriverFormPage from '@/pages/drivers/DriverFormPage';
+import StopsListPage from '@/pages/stops/StopsListPage';
+import StopFormPage from '@/pages/stops/StopFormPage';
+import UsersListPage from '@/pages/users/UsersListPage';
+import UserFormPage from '@/pages/users/UserFormPage';
+import CompaniesListPage from '@/pages/companies/CompaniesListPage';
+import CompanyFormPage from '@/pages/companies/CompanyFormPage';
+import MonitoringPage from '@/pages/monitoring/MonitoringPage';
 import { ROUTES } from '@/constants';
 
 const App: React.FC = () => {
@@ -43,6 +50,24 @@ const App: React.FC = () => {
         <Route path="/drivers" element={<DriversListPage />} />
         <Route path="/drivers/new" element={<DriverFormPage />} />
         <Route path="/drivers/:id/edit" element={<DriverFormPage />} />
+        
+        {/* Stops Management */}
+        <Route path="/stops" element={<StopsListPage />} />
+        <Route path="/stops/new" element={<StopFormPage />} />
+        <Route path="/stops/:id/edit" element={<StopFormPage />} />
+        
+        {/* Users Management */}
+        <Route path="/users" element={<UsersListPage />} />
+        <Route path="/users/new" element={<UserFormPage />} />
+        <Route path="/users/:id/edit" element={<UserFormPage />} />
+        
+        {/* Companies Management */}
+        <Route path="/companies" element={<CompaniesListPage />} />
+        <Route path="/companies/new" element={<CompanyFormPage />} />
+        <Route path="/companies/:id/edit" element={<CompanyFormPage />} />
+        
+        {/* Monitoring */}
+        <Route path="/monitoring" element={<MonitoringPage />} />
       </Route>
 
       {/* Default redirect */}
