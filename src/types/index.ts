@@ -151,3 +151,52 @@ export interface DashboardStats {
   todayReservations: number;
   averageOccupancy: number;
 }
+
+// Billing Types
+export interface Invoice {
+  id: string;
+  companyId: string;
+  company?: Company;
+  invoiceNumber: string;
+  billingPeriodStart: string;
+  billingPeriodEnd: string;
+  amount: number;
+  status: 'PENDING' | 'PAID' | 'OVERDUE' | 'CANCELLED';
+  dueDate: string;
+  paidAt?: string;
+  createdAt: string;
+}
+
+export interface Payment {
+  id: string;
+  invoiceId: string;
+  invoice?: Invoice;
+  amount: number;
+  paymentMethod: 'CARD' | 'BANK_TRANSFER' | 'CASH';
+  status: 'PENDING' | 'COMPLETED' | 'FAILED';
+  transactionId?: string;
+  paidAt?: string;
+  createdAt: string;
+}
+
+// Analytics Types
+export interface AnalyticsData {
+  period: string;
+  totalRevenue: number;
+  totalReservations: number;
+  totalRides: number;
+  averageRating: number;
+  topRoutes: Array<{
+    routeId: string;
+    routeName: string;
+    count: number;
+  }>;
+  revenueByMonth: Array<{
+    month: string;
+    revenue: number;
+  }>;
+  reservationsByStatus: Array<{
+    status: string;
+    count: number;
+  }>;
+}

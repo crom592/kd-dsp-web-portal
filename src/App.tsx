@@ -19,6 +19,9 @@ import UserFormPage from '@/pages/users/UserFormPage';
 import CompaniesListPage from '@/pages/companies/CompaniesListPage';
 import CompanyFormPage from '@/pages/companies/CompanyFormPage';
 import MonitoringPage from '@/pages/monitoring/MonitoringPage';
+import InvoicesListPage from '@/pages/billing/InvoicesListPage';
+import InvoiceDetailPage from '@/pages/billing/InvoiceDetailPage';
+import AnalyticsPage from '@/pages/analytics/AnalyticsPage';
 import { ROUTES } from '@/constants';
 
 const App: React.FC = () => {
