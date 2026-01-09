@@ -12,7 +12,16 @@ interface GetRoutesParams {
 export const routesService = {
   getRoutes: async (params: GetRoutesParams): Promise<PaginatedResponse<Route>> => {
     const response = await api.get('/routes', { params });
-    return response.data;
+    const backendData = response.data;
+    return {
+      data: backendData.items || backendData.data || [],
+      meta: backendData.meta || {
+        total: backendData.total || backendData.items?.length || 0,
+        page: params.page || 1,
+        limit: params.limit || 10,
+        totalPages: Math.ceil((backendData.total || backendData.items?.length || 0) / (params.limit || 10)),
+      },
+    };
   },
 
   getRoute: async (id: string): Promise<Route> => {

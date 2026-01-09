@@ -12,7 +12,17 @@ interface GetUsersParams {
 export const usersService = {
   getUsers: async (params: GetUsersParams): Promise<PaginatedResponse<User>> => {
     const response = await api.get('/users', { params });
-    return response.data;
+    // Transform backend response format to frontend expected format
+    const backendData = response.data;
+    return {
+      data: backendData.items || backendData.data || [],
+      meta: backendData.meta || {
+        total: backendData.total || backendData.items?.length || 0,
+        page: params.page || 1,
+        limit: params.limit || 10,
+        totalPages: Math.ceil((backendData.total || backendData.items?.length || 0) / (params.limit || 10)),
+      },
+    };
   },
 
   getUser: async (id: string): Promise<User> => {

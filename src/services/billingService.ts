@@ -18,7 +18,16 @@ interface GetPaymentsParams {
 export const billingService = {
   getInvoices: async (params: GetInvoicesParams): Promise<PaginatedResponse<Invoice>> => {
     const response = await api.get('/billing/invoices', { params });
-    return response.data;
+    const backendData = response.data;
+    return {
+      data: backendData.items || backendData.data || [],
+      meta: backendData.meta || {
+        total: backendData.total || backendData.items?.length || 0,
+        page: params.page || 1,
+        limit: params.limit || 10,
+        totalPages: Math.ceil((backendData.total || backendData.items?.length || 0) / (params.limit || 10)),
+      },
+    };
   },
 
   getInvoice: async (id: string): Promise<Invoice> => {
@@ -38,7 +47,16 @@ export const billingService = {
 
   getPayments: async (params: GetPaymentsParams): Promise<PaginatedResponse<Payment>> => {
     const response = await api.get('/billing/payments', { params });
-    return response.data;
+    const backendData = response.data;
+    return {
+      data: backendData.items || backendData.data || [],
+      meta: backendData.meta || {
+        total: backendData.total || backendData.items?.length || 0,
+        page: params.page || 1,
+        limit: params.limit || 10,
+        totalPages: Math.ceil((backendData.total || backendData.items?.length || 0) / (params.limit || 10)),
+      },
+    };
   },
 
   getPayment: async (id: string): Promise<Payment> => {
