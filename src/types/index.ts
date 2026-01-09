@@ -3,7 +3,7 @@ export enum UserRole {
   RIDER = 'RIDER',
   DRIVER = 'DRIVER',
   COMPANY_ADMIN = 'COMPANY_ADMIN',
-  SYSTEM_ADMIN = 'SYSTEM_ADMIN',
+  KD_OPERATOR = 'KD_OPERATOR',
 }
 
 export interface User {
@@ -36,10 +36,15 @@ export interface LoginRequest {
   password: string;
 }
 
-export interface LoginResponse {
+export interface LoginTokens {
   accessToken: string;
   refreshToken: string;
+  expiresIn: number;
+}
+
+export interface LoginResponse {
   user: User;
+  tokens: LoginTokens;
 }
 
 export interface AuthState {

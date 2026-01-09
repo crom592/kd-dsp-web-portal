@@ -29,7 +29,7 @@ export const ROLE_DISPLAY_NAMES = {
   RIDER: '탑승자',
   DRIVER: '운전자',
   COMPANY_ADMIN: '기업 관리자',
-  SYSTEM_ADMIN: '시스템 관리자',
+  KD_OPERATOR: 'KD 운영자',
 } as const;
 
 // Status Display Names
