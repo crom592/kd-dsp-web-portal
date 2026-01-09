@@ -14,10 +14,25 @@ export const ROUTES = {
   HOME: '/',
   LOGIN: '/login',
   DASHBOARD: '/dashboard',
+  // Routes
   ROUTES: '/routes',
   ROUTES_DETAIL: '/routes/:id',
-  ROUTES_CREATE: '/routes/create',
+  ROUTES_CREATE: '/routes/new',
+  ROUTES_EDIT: '/routes/:id/edit',
+  // Reservations
+  RESERVATIONS: '/reservations',
+  RESERVATIONS_DETAIL: '/reservations/:id',
+  // Vehicles
   VEHICLES: '/vehicles',
+  VEHICLES_CREATE: '/vehicles/new',
+  VEHICLES_EDIT: '/vehicles/:id/edit',
+  // Drivers
+  DRIVERS: '/drivers',
+  DRIVERS_CREATE: '/drivers/new',
+  DRIVERS_EDIT: '/drivers/:id/edit',
+  // Monitoring
+  MONITORING: '/monitoring',
+  // Users
   USERS: '/users',
   ANALYTICS: '/analytics',
   BILLING: '/billing',
@@ -73,7 +88,10 @@ export const QUERY_KEYS = {
   ROUTE: 'route',
   VEHICLES: 'vehicles',
   VEHICLE: 'vehicle',
+  DRIVERS: 'drivers',
+  DRIVER: 'driver',
   RESERVATIONS: 'reservations',
+  RESERVATION: 'reservation',
   DASHBOARD_STATS: 'dashboardStats',
   BILLING: 'billing',
   ANALYTICS: 'analytics',
