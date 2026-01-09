@@ -116,7 +116,7 @@ const RoutesListPage: React.FC = () => {
           columns={columns}
           loading={isLoading}
           paginationMode="server"
-          rowCount={data?.meta.total || 0}
+          rowCount={data?.meta?.total || 0}
           paginationModel={paginationModel}
           onPaginationModelChange={setPaginationModel}
           pageSizeOptions={[10, 20, 50]}
