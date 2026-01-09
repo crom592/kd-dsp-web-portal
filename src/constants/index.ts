@@ -34,8 +34,22 @@ export const ROUTES = {
   MONITORING: '/monitoring',
   // Users
   USERS: '/users',
-  ANALYTICS: '/analytics',
+  USERS_CREATE: '/users/new',
+  USERS_EDIT: '/users/:id/edit',
+  // Companies
+  COMPANIES: '/companies',
+  COMPANIES_CREATE: '/companies/new',
+  COMPANIES_EDIT: '/companies/:id/edit',
+  // Stops
+  STOPS: '/stops',
+  STOPS_CREATE: '/stops/new',
+  STOPS_EDIT: '/stops/:id/edit',
+  // Billing
   BILLING: '/billing',
+  BILLING_DETAIL: '/billing/:id',
+  // Analytics
+  ANALYTICS: '/analytics',
+  // Settings
   SETTINGS: '/settings',
 } as const;
 

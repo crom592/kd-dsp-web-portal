@@ -19,10 +19,9 @@ import UserFormPage from '@/pages/users/UserFormPage';
 import CompaniesListPage from '@/pages/companies/CompaniesListPage';
 import CompanyFormPage from '@/pages/companies/CompanyFormPage';
 import MonitoringPage from '@/pages/monitoring/MonitoringPage';
-// TODO: Enable when billing/analytics pages are added to routes
-// import InvoicesListPage from '@/pages/billing/InvoicesListPage';
-// import InvoiceDetailPage from '@/pages/billing/InvoiceDetailPage';
-// import AnalyticsPage from '@/pages/analytics/AnalyticsPage';
+import InvoicesListPage from '@/pages/billing/InvoicesListPage';
+import InvoiceDetailPage from '@/pages/billing/InvoiceDetailPage';
+import AnalyticsPage from '@/pages/analytics/AnalyticsPage';
 import { ROUTES } from '@/constants';
 
 const App: React.FC = () => {
@@ -72,6 +71,13 @@ const App: React.FC = () => {
         
         {/* Monitoring */}
         <Route path="/monitoring" element={<MonitoringPage />} />
+
+        {/* Billing */}
+        <Route path="/billing" element={<InvoicesListPage />} />
+        <Route path="/billing/:id" element={<InvoiceDetailPage />} />
+
+        {/* Analytics */}
+        <Route path="/analytics" element={<AnalyticsPage />} />
       </Route>
 
       {/* Default redirect */}

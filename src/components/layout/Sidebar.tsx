@@ -21,6 +21,11 @@ import {
   Analytics as AnalyticsIcon,
   Receipt as BillingIcon,
   Settings as SettingsIcon,
+  EventNote as ReservationIcon,
+  Person as DriverIcon,
+  Place as StopIcon,
+  Business as CompanyIcon,
+  Map as MonitoringIcon,
 } from '@mui/icons-material';
 import { ROUTES } from '@/constants';
 import { useAppSelector } from '@/store';
@@ -41,34 +46,62 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   {
-    label: 'Dashboard',
+    label: '대시보드',
     path: ROUTES.DASHBOARD,
     icon: <DashboardIcon />,
   },
   {
-    label: 'Routes',
+    label: '노선 관리',
     path: ROUTES.ROUTES,
     icon: <RouteIcon />,
   },
   {
-    label: 'Vehicles',
+    label: '예약 관리',
+    path: ROUTES.RESERVATIONS,
+    icon: <ReservationIcon />,
+  },
+  {
+    label: '차량 관리',
     path: ROUTES.VEHICLES,
     icon: <VehicleIcon />,
     roles: [UserRole.KD_OPERATOR],
   },
   {
-    label: 'Users',
+    label: '기사 관리',
+    path: ROUTES.DRIVERS,
+    icon: <DriverIcon />,
+    roles: [UserRole.KD_OPERATOR],
+  },
+  {
+    label: '정류장 관리',
+    path: ROUTES.STOPS,
+    icon: <StopIcon />,
+    roles: [UserRole.KD_OPERATOR],
+  },
+  {
+    label: '실시간 모니터링',
+    path: ROUTES.MONITORING,
+    icon: <MonitoringIcon />,
+  },
+  {
+    label: '사용자 관리',
     path: ROUTES.USERS,
     icon: <UsersIcon />,
     roles: [UserRole.KD_OPERATOR, UserRole.COMPANY_ADMIN],
   },
   {
-    label: 'Analytics',
+    label: '기업 관리',
+    path: ROUTES.COMPANIES,
+    icon: <CompanyIcon />,
+    roles: [UserRole.KD_OPERATOR],
+  },
+  {
+    label: '분석/리포트',
     path: ROUTES.ANALYTICS,
     icon: <AnalyticsIcon />,
   },
   {
-    label: 'Billing',
+    label: '정산/청구',
     path: ROUTES.BILLING,
     icon: <BillingIcon />,
     roles: [UserRole.KD_OPERATOR, UserRole.COMPANY_ADMIN],
@@ -77,7 +110,7 @@ const navItems: NavItem[] = [
 
 const bottomNavItems: NavItem[] = [
   {
-    label: 'Settings',
+    label: '설정',
     path: ROUTES.SETTINGS,
     icon: <SettingsIcon />,
   },
