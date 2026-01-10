@@ -10,24 +10,49 @@ interface GetDriversParams {
   endDate?: string;
 }
 
+// Transform backend driver data to frontend Driver type
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const transformDriver = (backendDriver: any): Driver => {
+  // Map backend UserStatus to frontend Driver status
+  // Backend uses ACTIVE/INACTIVE, frontend expects AVAILABLE/ON_DUTY/OFF_DUTY
+  const statusMap: Record<string, string> = {
+    'ACTIVE': 'AVAILABLE',
+    'INACTIVE': 'OFF_DUTY',
+    'SUSPENDED': 'OFF_DUTY',
+  };
+
+  return {
+    id: backendDriver.id,
+    userId: backendDriver.userId,
+    user: backendDriver.user || {
+      name: backendDriver.name,
+      phone: backendDriver.phone,
+    },
+    licenseNumber: backendDriver.licenseNumber,
+    licenseExpiry: backendDriver.licenseExpiry,
+    status: statusMap[backendDriver.status] || backendDriver.status || 'AVAILABLE',
+  };
+};
+
 export const driversService = {
   getDrivers: async (params: GetDriversParams): Promise<PaginatedResponse<Driver>> => {
     const response = await api.get('/drivers', { params });
     const backendData = response.data;
+    const items = backendData.items || backendData.data || [];
     return {
-      data: backendData.items || backendData.data || [],
-      meta: backendData.meta || {
-        total: backendData.total || backendData.items?.length || 0,
+      data: items.map(transformDriver),
+      meta: backendData.pagination || backendData.meta || {
+        total: backendData.total || items.length || 0,
         page: params.page || 1,
         limit: params.limit || 10,
-        totalPages: Math.ceil((backendData.total || backendData.items?.length || 0) / (params.limit || 10)),
+        totalPages: Math.ceil((backendData.total || items.length || 0) / (params.limit || 10)),
       },
     };
   },
 
   getDriver: async (id: string): Promise<Driver> => {
     const response = await api.get(`/drivers/${id}`);
-    return response.data;
+    return transformDriver(response.data);
   },
 
   createDriver: async (data: Partial<Driver>): Promise<Driver> => {

@@ -11,24 +11,40 @@ interface GetRoutesParams {
   endDate?: string;
 }
 
+// Transform backend route data to frontend Route type
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const transformRoute = (backendRoute: any): Route => ({
+  id: backendRoute.id,
+  name: backendRoute.routeName || backendRoute.name,
+  code: backendRoute.id?.substring(0, 8).toUpperCase() || '', // Generate code from ID if not present
+  companyId: backendRoute.companyId,
+  company: backendRoute.company,
+  type: backendRoute.routeType || backendRoute.type || 'COMMUTE',
+  status: backendRoute.status || 'ACTIVE',
+  stops: backendRoute.stops || [],
+  createdAt: backendRoute.createdAt,
+  updatedAt: backendRoute.updatedAt,
+});
+
 export const routesService = {
   getRoutes: async (params: GetRoutesParams): Promise<PaginatedResponse<Route>> => {
     const response = await api.get('/routes', { params });
     const backendData = response.data;
+    const items = backendData.items || backendData.data || [];
     return {
-      data: backendData.items || backendData.data || [],
+      data: items.map(transformRoute),
       meta: backendData.meta || {
-        total: backendData.total || backendData.items?.length || 0,
+        total: backendData.total || items.length || 0,
         page: params.page || 1,
         limit: params.limit || 10,
-        totalPages: Math.ceil((backendData.total || backendData.items?.length || 0) / (params.limit || 10)),
+        totalPages: Math.ceil((backendData.total || items.length || 0) / (params.limit || 10)),
       },
     };
   },
 
   getRoute: async (id: string): Promise<Route> => {
     const response = await api.get(`/routes/${id}`);
-    return response.data;
+    return transformRoute(response.data);
   },
 
   createRoute: async (data: Partial<Route>): Promise<Route> => {

@@ -21,9 +21,9 @@ const ReservationsListPage: React.FC = () => {
   const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 20 });
   const [statusFilter, setStatusFilter] = useState<string>('');
 
-  // 기간 검색을 위한 시작일/종료일 상태
-  const [startDate, setStartDate] = useState<string>('');
-  const [endDate, setEndDate] = useState<string>('');
+  // 기간 검색을 위한 시작일/종료일 상태 (기본값: 최근 90일)
+  const [startDate, setStartDate] = useState<string>(() => format(subDays(new Date(), 90), 'yyyy-MM-dd'));
+  const [endDate, setEndDate] = useState<string>(() => format(new Date(), 'yyyy-MM-dd'));
 
   // 빠른 기간 선택 핸들러
   const handleQuickDateRange = (days: number) => {

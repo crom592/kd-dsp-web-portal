@@ -40,24 +40,48 @@ export interface VehicleMonitoringResponse {
   timestamp: string;
 }
 
+// Transform backend vehicle data to frontend Vehicle type
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const transformVehicle = (backendVehicle: any): Vehicle => {
+  // Map backend status to frontend status
+  const statusMap: Record<string, string> = {
+    'IN_USE': 'IN_SERVICE',
+    'RETIRED': 'INACTIVE',
+    'AVAILABLE': 'AVAILABLE',
+    'MAINTENANCE': 'MAINTENANCE',
+  };
+
+  return {
+    id: backendVehicle.id,
+    plateNumber: backendVehicle.licensePlate || backendVehicle.plateNumber,
+    model: backendVehicle.model,
+    capacity: backendVehicle.capacity,
+    status: statusMap[backendVehicle.status] || backendVehicle.status,
+    currentLocation: backendVehicle.currentLocation,
+    driverId: backendVehicle.driverId,
+    driver: backendVehicle.driver,
+  };
+};
+
 export const vehiclesService = {
   getVehicles: async (params: GetVehiclesParams): Promise<PaginatedResponse<Vehicle>> => {
     const response = await api.get('/vehicles', { params });
     const backendData = response.data;
+    const items = backendData.items || backendData.data || [];
     return {
-      data: backendData.items || backendData.data || [],
+      data: items.map(transformVehicle),
       meta: backendData.meta || {
-        total: backendData.total || backendData.items?.length || 0,
+        total: backendData.total || items.length || 0,
         page: params.page || 1,
         limit: params.limit || 10,
-        totalPages: Math.ceil((backendData.total || backendData.items?.length || 0) / (params.limit || 10)),
+        totalPages: Math.ceil((backendData.total || items.length || 0) / (params.limit || 10)),
       },
     };
   },
 
   getVehicle: async (id: string): Promise<Vehicle> => {
     const response = await api.get(`/vehicles/${id}`);
-    return response.data;
+    return transformVehicle(response.data);
   },
 
   createVehicle: async (data: Partial<Vehicle>): Promise<Vehicle> => {
