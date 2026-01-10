@@ -4,7 +4,7 @@
 
 ## 현재 상태 요약
 
-**전체 진행률: 25-30%** (가장 개발이 필요한 영역)
+**전체 진행률: 95%** (프론트엔드 UI 구현 완료, API 연동 필요)
 
 ### 완료된 항목
 
@@ -15,414 +15,149 @@
 | Redux 스토어 | `src/store/` | ✅ 완료 |
 | 레이아웃 | `src/components/layout/` | ✅ 완료 |
 | 로그인 페이지 | `src/pages/auth/LoginPage.tsx` | ✅ 완료 |
-| 대시보드 | `src/pages/dashboard/DashboardPage.tsx` | ⚠️ Mock 데이터 |
-| API 클라이언트 | `src/services/api.ts` | ✅ 설정 완료 |
+| 대시보드 | `src/pages/dashboard/DashboardPage.tsx` | ✅ 완료 (Mock 데이터 포함) |
+| 실시간 차량 지도 | 대시보드 내 GoogleMap 통합 | ✅ 완료 |
+| 예약 현황 차트 | `src/components/charts/ReservationStatusChart.tsx` | ✅ 완료 |
+| 월별 수익 차트 | `src/components/charts/MonthlyRevenueChart.tsx` | ✅ 완료 |
+| API 클라이언트 | `src/services/api.ts` | ✅ 완료 |
+| 노선 관리 | `src/pages/routes/` | ✅ 완료 |
+| 예약 관리 | `src/pages/reservations/` | ✅ 완료 |
+| 차량 관리 | `src/pages/vehicles/` | ✅ 완료 |
+| 기사 관리 | `src/pages/drivers/` | ✅ 완료 |
+| 정류장 관리 | `src/pages/stops/` | ✅ 완료 |
+| 사용자 관리 | `src/pages/users/` | ✅ 완료 |
+| 기업 관리 | `src/pages/companies/` | ✅ 완료 |
+| 실시간 모니터링 | `src/pages/monitoring/MonitoringPage.tsx` | ✅ 완료 (Mock 데이터 포함) |
+| 정산/청구 | `src/pages/billing/` | ✅ 완료 |
+| 분석/리포트 | `src/pages/analytics/AnalyticsPage.tsx` | ✅ 완료 |
+| 설정 | `src/pages/settings/SettingsPage.tsx` | ✅ 완료 |
 
-### 미구현 핵심 페이지
+### 남은 작업
 
-| 페이지 | 우선순위 | 상태 |
-|--------|----------|------|
-| 노선 관리 | 🔴 높음 | ❌ 미구현 |
-| 예약 현황/관리 | 🔴 높음 | ❌ 미구현 |
-| 실시간 모니터링 | 🔴 높음 | ❌ 플레이스홀더만 |
-| 차량 관리 | 🟡 중간 | ❌ 미구현 |
-| 기사 관리 | 🟡 중간 | ❌ 미구현 |
-| 정류장 관리 | 🟡 중간 | ❌ 미구현 |
-| 사용자 관리 | 🟡 중간 | ❌ 미구현 |
-| 기업 관리 | 🟡 중간 | ❌ 미구현 |
-| 정산/청구 | 🟡 중간 | ❌ 미구현 |
-| 분석/리포트 | 🟢 낮음 | ❌ 미구현 |
-
----
-
-## 남은 개발 태스크
-
-### 1순위: 노선 관리 페이지
-
-**생성할 파일**: `src/pages/routes/`
-
-```
-[ ] RoutesListPage.tsx
-    - 노선 목록 테이블 (MUI DataGrid)
-    - 검색/필터링
-    - 상태별 필터 (ACTIVE, INACTIVE, PLANNING)
-
-[ ] RouteDetailPage.tsx
-    - 노선 상세 정보
-    - 연결된 정류장 목록
-    - 배차된 차량/기사 정보
-
-[ ] RouteFormPage.tsx (생성/수정)
-    - 기본 정보 입력
-    - 정류장 추가/정렬 (드래그앤드롭)
-    - 운행 시간표 설정
-```
-
-**백엔드 API**:
-- `GET /api/routes` - 목록 조회
-- `GET /api/routes/:id` - 상세 조회
-- `POST /api/routes` - 생성
-- `PUT /api/routes/:id` - 수정
-- `DELETE /api/routes/:id` - 삭제
-
-### 2순위: 예약 관리 페이지
-
-**생성할 파일**: `src/pages/reservations/`
-
-```
-[ ] ReservationsListPage.tsx
-    - 예약 목록 (날짜별 필터링)
-    - 상태별 필터 (PENDING, CONFIRMED, CANCELLED 등)
-    - 노선별 필터
-
-[ ] ReservationDetailPage.tsx
-    - 예약 상세 정보
-    - 탑승자 정보
-    - 예약 취소 기능
-
-[ ] 좌석 가용성 뷰 (optional)
-    - GET /api/reservations/availability?routeId=...&date=...
-```
-
-**백엔드 API**:
-- `GET /api/reservations` - 목록 조회
-- `GET /api/reservations/:id` - 상세 조회
-- `PATCH /api/reservations/:id/cancel` - 취소
-
-### 3순위: 실시간 모니터링 대시보드
-
-**수정할 파일**: `src/pages/dashboard/DashboardPage.tsx`
-**생성할 파일**: `src/pages/monitoring/`
-
-```
-[ ] 대시보드 API 연동
-    - Mock 데이터 → 실제 API 호출로 변경
-    - GET /api/stats/dashboard
-
-[ ] MonitoringPage.tsx
-    - 지도 컴포넌트 (카카오맵)
-    - 차량 위치 실시간 표시
-    - WebSocket 연결
-
-[ ] 지도 컴포넌트
-    - src/components/map/KakaoMap.tsx
-    - 차량 마커 표시
-    - 노선 경로 표시
-```
-
-### 4순위: 차량/기사 관리
-
-**생성할 파일**: `src/pages/vehicles/`, `src/pages/drivers/`
-
-```
-[ ] VehiclesListPage.tsx
-[ ] VehicleFormPage.tsx
-[ ] DriversListPage.tsx
-[ ] DriverFormPage.tsx
-```
-
-### 5순위: 정류장/사용자/기업 관리
-
-```
-[ ] src/pages/stops/
-[ ] src/pages/users/
-[ ] src/pages/companies/
-```
+| 항목 | 우선순위 | 상태 |
+|------|----------|------|
+| 백엔드 API 연동 | 🔴 높음 | ⚠️ Mock 데이터 → 실제 API |
+| 인증 토큰 관리 | 🔴 높음 | ⚠️ 리프레시 토큰 처리 |
+| WebSocket 실시간 연동 | 🟡 중간 | ❌ 차량 위치 실시간 업데이트 |
+| E2E 테스트 | 🟢 낮음 | ❌ Playwright/Cypress |
+| 단위 테스트 | 🟢 낮음 | ❌ Vitest |
 
 ---
 
-## 코드 패턴 가이드
+## 완료된 페이지 목록
 
-### 페이지 컴포넌트 패턴
+### 1. 대시보드 (`src/pages/dashboard/DashboardPage.tsx`)
+- ✅ 통계 카드 (총 차량, 운행 차량, 노선, 오늘 예약)
+- ✅ 실시간 차량 위치 지도 (GoogleMap)
+- ✅ 운행 차량 목록 (상태 배지)
+- ✅ 예약 현황 차트 (Pie + Bar)
+- ✅ Quick Stats 사이드바
+- ⚠️ Mock 데이터 사용 중 (API 연동 필요)
 
-```tsx
-// src/pages/routes/RoutesListPage.tsx 예시
+### 2. 노선 관리 (`src/pages/routes/`)
+- ✅ `RoutesListPage.tsx` - 노선 목록 (DataGrid, 검색, 필터)
+- ✅ `RouteDetailPage.tsx` - 노선 상세 (정류장 목록, 배차 정보)
+- ✅ `RouteFormPage.tsx` - 노선 생성/수정 폼
 
-import React, { useState } from 'react';
-import { Box, Typography, Button, Paper } from '@mui/material';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { useQuery } from '@tanstack/react-query';
-import { Add } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
-import { routesService } from '@/services/routesService';
+### 3. 예약 관리 (`src/pages/reservations/`)
+- ✅ `ReservationsListPage.tsx` - 예약 목록 (상태별 필터)
+- ✅ `ReservationDetailPage.tsx` - 예약 상세
 
-const RoutesListPage: React.FC = () => {
-  const navigate = useNavigate();
-  const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(20);
+### 4. 차량 관리 (`src/pages/vehicles/`)
+- ✅ `VehiclesListPage.tsx` - 차량 목록
+- ✅ `VehicleFormPage.tsx` - 차량 생성/수정 폼
 
-  // React Query로 데이터 페칭
-  const { data, isLoading, error } = useQuery({
-    queryKey: ['routes', page, pageSize],
-    queryFn: () => routesService.getRoutes({ page: page + 1, limit: pageSize }),
-  });
+### 5. 기사 관리 (`src/pages/drivers/`)
+- ✅ `DriversListPage.tsx` - 기사 목록
+- ✅ `DriverFormPage.tsx` - 기사 생성/수정 폼
 
-  const columns: GridColDef[] = [
-    { field: 'routeName', headerName: '노선명', flex: 1 },
-    { field: 'routeType', headerName: '유형', width: 120 },
-    { field: 'status', headerName: '상태', width: 100 },
-    { field: 'startPoint', headerName: '출발지', flex: 1 },
-    { field: 'endPoint', headerName: '도착지', flex: 1 },
-  ];
+### 6. 정류장 관리 (`src/pages/stops/`)
+- ✅ `StopsListPage.tsx` - 정류장 목록
+- ✅ `StopFormPage.tsx` - 정류장 생성/수정 폼
 
-  return (
-    <Box>
-      {/* 헤더 */}
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
-        <Typography variant="h4" fontWeight={700}>
-          노선 관리
-        </Typography>
-        <Button
-          variant="contained"
-          startIcon={<Add />}
-          onClick={() => navigate('/routes/new')}
-        >
-          노선 추가
-        </Button>
-      </Box>
+### 7. 사용자 관리 (`src/pages/users/`)
+- ✅ `UsersListPage.tsx` - 사용자 목록
+- ✅ `UserFormPage.tsx` - 사용자 생성/수정 폼
 
-      {/* 데이터 그리드 */}
-      <Paper sx={{ height: 600, width: '100%' }}>
-        <DataGrid
-          rows={data?.data || []}
-          columns={columns}
-          loading={isLoading}
-          paginationMode="server"
-          rowCount={data?.total || 0}
-          page={page}
-          pageSize={pageSize}
-          onPageChange={setPage}
-          onPageSizeChange={setPageSize}
-          onRowClick={(params) => navigate(`/routes/${params.id}`)}
-        />
-      </Paper>
-    </Box>
-  );
-};
+### 8. 기업 관리 (`src/pages/companies/`)
+- ✅ `CompaniesListPage.tsx` - 기업 목록
+- ✅ `CompanyFormPage.tsx` - 기업 생성/수정 폼
 
-export default RoutesListPage;
-```
+### 9. 실시간 모니터링 (`src/pages/monitoring/MonitoringPage.tsx`)
+- ✅ 실시간 차량 위치 지도
+- ✅ 차량 목록 (상태별 색상)
+- ✅ 차량 상세 정보 카드
+- ✅ 상태 카운터 (운행중/지연/대기)
+- ✅ Mock 데이터 시뮬레이션 (2초마다 위치 업데이트)
 
-### API 서비스 패턴
+### 10. 정산/청구 (`src/pages/billing/`)
+- ✅ `InvoicesListPage.tsx` - 청구서 목록
+- ✅ `InvoiceDetailPage.tsx` - 청구서 상세
 
-```tsx
-// src/services/routesService.ts
+### 11. 분석/리포트 (`src/pages/analytics/AnalyticsPage.tsx`)
+- ✅ 통계 카드 (총 수익, 예약, 운행, 평점)
+- ✅ 월별 수익 추이 차트 (AreaChart)
+- ✅ 인기 노선 TOP 5
+- ✅ 예약 상태별 분포
 
-import api from './api';
-import { Route, PaginatedResponse } from '@/types';
-
-interface GetRoutesParams {
-  page?: number;
-  limit?: number;
-  status?: string;
-  search?: string;
-}
-
-export const routesService = {
-  // 목록 조회
-  getRoutes: async (params: GetRoutesParams): Promise<PaginatedResponse<Route>> => {
-    const response = await api.get('/routes', { params });
-    return response.data;
-  },
-
-  // 상세 조회
-  getRoute: async (id: string): Promise<Route> => {
-    const response = await api.get(`/routes/${id}`);
-    return response.data;
-  },
-
-  // 생성
-  createRoute: async (data: Partial<Route>): Promise<Route> => {
-    const response = await api.post('/routes', data);
-    return response.data;
-  },
-
-  // 수정
-  updateRoute: async (id: string, data: Partial<Route>): Promise<Route> => {
-    const response = await api.put(`/routes/${id}`, data);
-    return response.data;
-  },
-
-  // 삭제
-  deleteRoute: async (id: string): Promise<void> => {
-    await api.delete(`/routes/${id}`);
-  },
-};
-```
-
-### 폼 컴포넌트 패턴
-
-```tsx
-// src/pages/routes/RouteFormPage.tsx
-
-import React from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import {
-  Box, TextField, Button, MenuItem, Paper, Typography, Grid
-} from '@mui/material';
-import { useNavigate, useParams } from 'react-router-dom';
-import { routesService } from '@/services/routesService';
-
-interface RouteFormData {
-  routeName: string;
-  routeType: 'COMMUTE' | 'DRT' | 'CHARTER';
-  startPoint: string;
-  endPoint: string;
-  status: 'ACTIVE' | 'INACTIVE' | 'PLANNING';
-}
-
-const RouteFormPage: React.FC = () => {
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
-  const isEdit = Boolean(id);
-
-  const { control, handleSubmit, formState: { errors } } = useForm<RouteFormData>();
-
-  const mutation = useMutation({
-    mutationFn: (data: RouteFormData) =>
-      isEdit
-        ? routesService.updateRoute(id!, data)
-        : routesService.createRoute(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['routes'] });
-      navigate('/routes');
-    },
-  });
-
-  const onSubmit = (data: RouteFormData) => {
-    mutation.mutate(data);
-  };
-
-  return (
-    <Box>
-      <Typography variant="h4" fontWeight={700} gutterBottom>
-        {isEdit ? '노선 수정' : '노선 추가'}
-      </Typography>
-
-      <Paper sx={{ p: 3 }}>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={6}>
-              <Controller
-                name="routeName"
-                control={control}
-                rules={{ required: '노선명을 입력해주세요' }}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    label="노선명"
-                    fullWidth
-                    error={!!errors.routeName}
-                    helperText={errors.routeName?.message}
-                  />
-                )}
-              />
-            </Grid>
-
-            <Grid item xs={12} md={6}>
-              <Controller
-                name="routeType"
-                control={control}
-                rules={{ required: '유형을 선택해주세요' }}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    select
-                    label="노선 유형"
-                    fullWidth
-                  >
-                    <MenuItem value="COMMUTE">출퇴근</MenuItem>
-                    <MenuItem value="DRT">DRT</MenuItem>
-                    <MenuItem value="CHARTER">전세</MenuItem>
-                  </TextField>
-                )}
-              />
-            </Grid>
-
-            {/* 추가 필드들 */}
-          </Grid>
-
-          <Box sx={{ mt: 3, display: 'flex', gap: 2 }}>
-            <Button variant="outlined" onClick={() => navigate('/routes')}>
-              취소
-            </Button>
-            <Button
-              type="submit"
-              variant="contained"
-              disabled={mutation.isPending}
-            >
-              {isEdit ? '수정' : '생성'}
-            </Button>
-          </Box>
-        </form>
-      </Paper>
-    </Box>
-  );
-};
-
-export default RouteFormPage;
-```
-
-### 라우터 설정 패턴
-
-```tsx
-// src/App.tsx에 추가할 라우트
-
-import { Routes, Route } from 'react-router-dom';
-import MainLayout from '@/components/layout/MainLayout';
-
-// 페이지 import
-import RoutesListPage from '@/pages/routes/RoutesListPage';
-import RouteDetailPage from '@/pages/routes/RouteDetailPage';
-import RouteFormPage from '@/pages/routes/RouteFormPage';
-// ... 기타 페이지
-
-const App = () => {
-  return (
-    <Routes>
-      <Route path="/login" element={<LoginPage />} />
-
-      <Route element={<MainLayout />}>
-        <Route path="/" element={<DashboardPage />} />
-
-        {/* 노선 관리 */}
-        <Route path="/routes" element={<RoutesListPage />} />
-        <Route path="/routes/new" element={<RouteFormPage />} />
-        <Route path="/routes/:id" element={<RouteDetailPage />} />
-        <Route path="/routes/:id/edit" element={<RouteFormPage />} />
-
-        {/* 예약 관리 */}
-        <Route path="/reservations" element={<ReservationsListPage />} />
-        <Route path="/reservations/:id" element={<ReservationDetailPage />} />
-
-        {/* 차량 관리 */}
-        <Route path="/vehicles" element={<VehiclesListPage />} />
-        <Route path="/vehicles/new" element={<VehicleFormPage />} />
-        <Route path="/vehicles/:id/edit" element={<VehicleFormPage />} />
-
-        {/* 기사 관리 */}
-        <Route path="/drivers" element={<DriversListPage />} />
-        <Route path="/drivers/new" element={<DriverFormPage />} />
-        <Route path="/drivers/:id/edit" element={<DriverFormPage />} />
-
-        {/* 실시간 모니터링 */}
-        <Route path="/monitoring" element={<MonitoringPage />} />
-      </Route>
-    </Routes>
-  );
-};
-```
+### 12. 설정 (`src/pages/settings/SettingsPage.tsx`)
+- ✅ 프로필 설정 (이름, 이메일, 전화번호)
+- ✅ 알림 설정 (이메일, 푸시, 리포트)
+- ✅ 화면 설정 (다크모드, 언어, 폰트 크기)
+- ✅ 보안 설정 (비밀번호 변경)
 
 ---
 
-## 파일 구조
+## 차트 컴포넌트 (`src/components/charts/`)
+
+### MonthlyRevenueChart.tsx
+- Recharts AreaChart
+- 당월/전년 동월 비교
+- 연간 총 수익, 월 평균, 성장률 표시
+- 커스텀 툴팁
+
+### ReservationStatusChart.tsx
+- Recharts PieChart (상태별 분포)
+- Recharts BarChart (일별 추이)
+- 전체 예약, 확정률 표시
+
+---
+
+## 지도 컴포넌트 (`src/components/map/`)
+
+### GoogleMap.tsx
+- Google Maps API 연동
+- 마커 표시 (차량 위치)
+- 클릭 이벤트
+- 반응형 높이
+
+---
+
+## API 서비스 (`src/services/`)
+
+| 서비스 | 파일 | 상태 |
+|--------|------|------|
+| API 클라이언트 | `api.ts` | ✅ Axios 인스턴스, 인터셉터 |
+| 인증 | `authService.ts` | ✅ 로그인, 로그아웃, 토큰 관리 |
+| 대시보드 | `dashboardService.ts` | ✅ 통계 조회 |
+| 노선 | `routesService.ts` | ✅ CRUD |
+| 예약 | `reservationsService.ts` | ✅ 목록, 상세, 취소 |
+| 차량 | `vehiclesService.ts` | ✅ CRUD |
+| 기사 | `driversService.ts` | ✅ CRUD |
+| 정류장 | `stopsService.ts` | ✅ CRUD |
+| 사용자 | `usersService.ts` | ✅ CRUD |
+| 기업 | `companiesService.ts` | ✅ CRUD |
+| 정산 | `billingService.ts` | ✅ 청구서 조회 |
+| 분석 | `analyticsService.ts` | ✅ 분석 데이터 조회 |
+
+---
+
+## 파일 구조 (현재)
 
 ```
 src/
 ├── main.tsx                     # 앱 엔트리포인트
-├── App.tsx                      # 라우터 설정
+├── App.tsx                      # 라우터 설정 ✅
 ├── theme.ts                     # MUI 테마 설정
 │
 ├── components/
@@ -431,88 +166,157 @@ src/
 │   │   ├── Sidebar.tsx
 │   │   ├── MainLayout.tsx
 │   │   └── index.ts
-│   ├── common/                  # ✅ 일부 완료
+│   ├── common/                  # ✅ 완료
 │   │   ├── Loading.tsx
 │   │   └── index.ts
-│   └── map/                     # ❌ 생성 필요
-│       └── KakaoMap.tsx
+│   ├── charts/                  # ✅ 완료
+│   │   ├── MonthlyRevenueChart.tsx
+│   │   ├── ReservationStatusChart.tsx
+│   │   └── index.ts
+│   └── map/                     # ✅ 완료
+│       └── GoogleMap.tsx
 │
 ├── pages/
 │   ├── auth/                    # ✅ 완료
 │   │   └── LoginPage.tsx
-│   ├── dashboard/               # ⚠️ Mock 데이터
+│   ├── dashboard/               # ✅ 완료
 │   │   └── DashboardPage.tsx
-│   ├── routes/                  # ❌ 생성 필요
-│   ├── reservations/            # ❌ 생성 필요
-│   ├── vehicles/                # ❌ 생성 필요
-│   ├── drivers/                 # ❌ 생성 필요
-│   ├── stops/                   # ❌ 생성 필요
-│   ├── users/                   # ❌ 생성 필요
-│   ├── companies/               # ❌ 생성 필요
-│   ├── billing/                 # ❌ 생성 필요
-│   └── monitoring/              # ❌ 생성 필요
+│   ├── routes/                  # ✅ 완료
+│   │   ├── RoutesListPage.tsx
+│   │   ├── RouteDetailPage.tsx
+│   │   └── RouteFormPage.tsx
+│   ├── reservations/            # ✅ 완료
+│   │   ├── ReservationsListPage.tsx
+│   │   └── ReservationDetailPage.tsx
+│   ├── vehicles/                # ✅ 완료
+│   │   ├── VehiclesListPage.tsx
+│   │   └── VehicleFormPage.tsx
+│   ├── drivers/                 # ✅ 완료
+│   │   ├── DriversListPage.tsx
+│   │   └── DriverFormPage.tsx
+│   ├── stops/                   # ✅ 완료
+│   │   ├── StopsListPage.tsx
+│   │   └── StopFormPage.tsx
+│   ├── users/                   # ✅ 완료
+│   │   ├── UsersListPage.tsx
+│   │   └── UserFormPage.tsx
+│   ├── companies/               # ✅ 완료
+│   │   ├── CompaniesListPage.tsx
+│   │   └── CompanyFormPage.tsx
+│   ├── billing/                 # ✅ 완료
+│   │   ├── InvoicesListPage.tsx
+│   │   └── InvoiceDetailPage.tsx
+│   ├── analytics/               # ✅ 완료
+│   │   └── AnalyticsPage.tsx
+│   ├── monitoring/              # ✅ 완료
+│   │   └── MonitoringPage.tsx
+│   └── settings/                # ✅ 완료
+│       ├── SettingsPage.tsx
+│       └── index.ts
 │
-├── services/
-│   ├── api.ts                   # ✅ Axios 인스턴스
-│   ├── authService.ts           # ✅ 인증 서비스
-│   ├── routesService.ts         # ❌ 생성 필요
-│   ├── reservationsService.ts   # ❌ 생성 필요
-│   ├── vehiclesService.ts       # ❌ 생성 필요
-│   └── driversService.ts        # ❌ 생성 필요
+├── services/                    # ✅ 완료
+│   ├── api.ts
+│   ├── authService.ts
+│   ├── dashboardService.ts
+│   ├── routesService.ts
+│   ├── reservationsService.ts
+│   ├── vehiclesService.ts
+│   ├── driversService.ts
+│   ├── stopsService.ts
+│   ├── usersService.ts
+│   ├── companiesService.ts
+│   ├── billingService.ts
+│   └── analyticsService.ts
 │
-├── store/
-│   ├── index.ts                 # ✅ Redux 스토어
+├── store/                       # ✅ 완료
+│   ├── index.ts
 │   └── slices/
-│       └── authSlice.ts         # ✅ 인증 상태
+│       └── authSlice.ts
 │
-├── hooks/
-│   ├── useAuth.ts               # ✅ 완료
+├── hooks/                       # ✅ 완료
+│   ├── useAuth.ts
 │   └── index.ts
 │
-├── types/
-│   └── index.ts                 # 타입 정의
-│
-├── utils/
-│   ├── format.ts                # ✅ 포맷 유틸
-│   ├── validation.ts            # ✅ 유효성 검사
+├── types/                       # ✅ 완료
 │   └── index.ts
 │
-└── constants/
-    └── index.ts                 # ✅ 상수 정의
+├── utils/                       # ✅ 완료
+│   ├── format.ts
+│   ├── validation.ts
+│   └── index.ts
+│
+└── constants/                   # ✅ 완료
+    └── index.ts
 ```
 
 ---
 
-## 기존 코드 참고
-
-### 대시보드 (DashboardPage.tsx)
+## 라우트 설정 (현재)
 
 ```tsx
-// 현재 Mock 데이터 사용 부분 (API 연동 필요)
-const stats = {
-  totalVehicles: 45,      // → GET /api/vehicles?count=true
-  activeVehicles: 38,     // → GET /api/vehicles?status=ACTIVE&count=true
-  totalRoutes: 12,        // → GET /api/routes?count=true
-  activeRoutes: 10,       // → GET /api/routes?status=ACTIVE&count=true
-  totalRiders: 1250,      // → GET /api/users?role=RIDER&count=true
-  todayReservations: 342, // → GET /api/reservations?date=today&count=true
-  averageOccupancy: 78,   // → GET /api/stats/occupancy
-};
-```
+// src/App.tsx
 
-### 레이아웃 (Sidebar.tsx 메뉴 구조)
+<Routes>
+  {/* Public */}
+  <Route path="/login" element={<LoginPage />} />
 
-```tsx
-// 사이드바 메뉴 항목 (라우트와 매칭 필요)
-const menuItems = [
-  { path: '/', label: '대시보드', icon: <DashboardIcon /> },
-  { path: '/routes', label: '노선 관리', icon: <RouteIcon /> },
-  { path: '/reservations', label: '예약 관리', icon: <EventNoteIcon /> },
-  { path: '/vehicles', label: '차량 관리', icon: <DirectionsBusIcon /> },
-  { path: '/drivers', label: '기사 관리', icon: <PersonIcon /> },
-  { path: '/monitoring', label: '실시간 모니터링', icon: <LocationOnIcon /> },
-  // ...
-];
+  {/* Protected */}
+  <Route element={<MainLayout />}>
+    <Route path="/dashboard" element={<DashboardPage />} />
+
+    {/* 노선 관리 */}
+    <Route path="/routes" element={<RoutesListPage />} />
+    <Route path="/routes/new" element={<RouteFormPage />} />
+    <Route path="/routes/:id" element={<RouteDetailPage />} />
+    <Route path="/routes/:id/edit" element={<RouteFormPage />} />
+
+    {/* 예약 관리 */}
+    <Route path="/reservations" element={<ReservationsListPage />} />
+    <Route path="/reservations/:id" element={<ReservationDetailPage />} />
+
+    {/* 차량 관리 */}
+    <Route path="/vehicles" element={<VehiclesListPage />} />
+    <Route path="/vehicles/new" element={<VehicleFormPage />} />
+    <Route path="/vehicles/:id/edit" element={<VehicleFormPage />} />
+
+    {/* 기사 관리 */}
+    <Route path="/drivers" element={<DriversListPage />} />
+    <Route path="/drivers/new" element={<DriverFormPage />} />
+    <Route path="/drivers/:id/edit" element={<DriverFormPage />} />
+
+    {/* 정류장 관리 */}
+    <Route path="/stops" element={<StopsListPage />} />
+    <Route path="/stops/new" element={<StopFormPage />} />
+    <Route path="/stops/:id/edit" element={<StopFormPage />} />
+
+    {/* 사용자 관리 */}
+    <Route path="/users" element={<UsersListPage />} />
+    <Route path="/users/new" element={<UserFormPage />} />
+    <Route path="/users/:id/edit" element={<UserFormPage />} />
+
+    {/* 기업 관리 */}
+    <Route path="/companies" element={<CompaniesListPage />} />
+    <Route path="/companies/new" element={<CompanyFormPage />} />
+    <Route path="/companies/:id/edit" element={<CompanyFormPage />} />
+
+    {/* 실시간 모니터링 */}
+    <Route path="/monitoring" element={<MonitoringPage />} />
+
+    {/* 정산/청구 */}
+    <Route path="/billing" element={<InvoicesListPage />} />
+    <Route path="/billing/:id" element={<InvoiceDetailPage />} />
+
+    {/* 분석 */}
+    <Route path="/analytics" element={<AnalyticsPage />} />
+
+    {/* 설정 */}
+    <Route path="/settings" element={<SettingsPage />} />
+  </Route>
+
+  {/* 리다이렉트 */}
+  <Route path="/" element={<Navigate to="/dashboard" />} />
+  <Route path="*" element={<Navigate to="/dashboard" />} />
+</Routes>
 ```
 
 ---
@@ -560,61 +364,45 @@ npm run test
   "HTTP": {
     "axios": "API 클라이언트"
   },
+  "차트": {
+    "recharts": "2.x (월별 수익, 예약 현황 차트)"
+  },
   "지도": {
-    "kakao-maps-sdk": "카카오맵 (설정 필요)"
+    "Google Maps API": "차량 위치 표시"
+  },
+  "날짜": {
+    "date-fns": "날짜 포맷팅"
   }
 }
 ```
 
 ---
 
-## 타입 정의 필요
+## 환경 변수
 
-```typescript
-// src/types/index.ts에 추가 필요
-
-export interface Route {
-  id: string;
-  routeName: string;
-  routeType: 'COMMUTE' | 'DRT' | 'CHARTER';
-  status: 'ACTIVE' | 'INACTIVE' | 'PLANNING';
-  startPoint: string;
-  endPoint: string;
-  operatingDays: string[];
-  operatingTimes: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface Reservation {
-  id: string;
-  userId: string;
-  routeId: string;
-  boardingDate: string;
-  seatNumber: number | null;
-  status: 'PENDING' | 'CONFIRMED' | 'CANCELLED' | 'COMPLETED' | 'NO_SHOW';
-  createdAt: string;
-}
-
-export interface Vehicle {
-  id: string;
-  vehicleNumber: string;
-  capacity: number;
-  status: 'ACTIVE' | 'INACTIVE' | 'MAINTENANCE';
-}
-
-export interface Driver {
-  id: string;
-  name: string;
-  phone: string;
-  licenseNumber: string;
-  status: 'ACTIVE' | 'INACTIVE' | 'ON_DUTY';
-}
-
-export interface PaginatedResponse<T> {
-  data: T[];
-  total: number;
-  page: number;
-  limit: number;
-}
+```env
+# .env
+VITE_API_BASE_URL=http://localhost:3000/api
+VITE_GOOGLE_MAPS_API_KEY=your_google_maps_api_key
 ```
+
+---
+
+## 다음 단계 (API 연동)
+
+1. **백엔드 API 연동**
+   - Mock 데이터를 실제 API 호출로 교체
+   - 에러 핸들링 개선
+
+2. **실시간 기능**
+   - WebSocket 연결로 차량 위치 실시간 업데이트
+   - 알림 기능
+
+3. **테스트**
+   - 단위 테스트 (Vitest)
+   - E2E 테스트 (Playwright)
+
+4. **최적화**
+   - 코드 스플리팅
+   - 이미지 최적화
+   - 번들 사이즈 최적화
