@@ -6,6 +6,8 @@ interface GetVehiclesParams {
   limit?: number;
   status?: string;
   search?: string;
+  startDate?: string;
+  endDate?: string;
 }
 
 export interface VehicleMonitoringData {

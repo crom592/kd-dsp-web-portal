@@ -6,6 +6,8 @@ interface GetCompaniesParams {
   limit?: number;
   search?: string;
   isActive?: boolean;
+  startDate?: string;
+  endDate?: string;
 }
 
 export const companiesService = {

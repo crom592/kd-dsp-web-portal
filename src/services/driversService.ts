@@ -6,6 +6,8 @@ interface GetDriversParams {
   limit?: number;
   status?: string;
   search?: string;
+  startDate?: string;
+  endDate?: string;
 }
 
 export const driversService = {

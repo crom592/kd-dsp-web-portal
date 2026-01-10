@@ -7,6 +7,8 @@ interface GetUsersParams {
   role?: string;
   search?: string;
   companyId?: string;
+  startDate?: string;
+  endDate?: string;
 }
 
 export const usersService = {
