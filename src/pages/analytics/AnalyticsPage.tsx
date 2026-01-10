@@ -7,8 +7,8 @@ import {
   Card,
   CardContent,
   TextField,
-  MenuItem,
   Chip,
+  Button,
 } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import {
@@ -16,16 +16,33 @@ import {
   EventNote,
   DirectionsBus,
   AttachMoney,
+  Search as SearchIcon,
+  Clear as ClearIcon,
 } from '@mui/icons-material';
 import { analyticsService } from '@/services/analyticsService';
-import { format, subMonths } from 'date-fns';
+import { format, subDays } from 'date-fns';
 import { MonthlyRevenueChart } from '@/components/charts';
 
 const AnalyticsPage: React.FC = () => {
-  const [period, setPeriod] = useState<string>('30');
+  // 기간 검색을 위한 시작일/종료일 상태
+  const [startDate, setStartDate] = useState<string>(
+    format(subDays(new Date(), 30), 'yyyy-MM-dd')
+  );
+  const [endDate, setEndDate] = useState<string>(format(new Date(), 'yyyy-MM-dd'));
 
-  const startDate = format(subMonths(new Date(), parseInt(period) / 30), 'yyyy-MM-dd');
-  const endDate = format(new Date(), 'yyyy-MM-dd');
+  // 빠른 기간 선택 핸들러
+  const handleQuickDateRange = (days: number) => {
+    const today = new Date();
+    const start = subDays(today, days);
+    setStartDate(format(start, 'yyyy-MM-dd'));
+    setEndDate(format(today, 'yyyy-MM-dd'));
+  };
+
+  // 기간 필터 초기화 (기본 30일)
+  const handleClearDateRange = () => {
+    setStartDate(format(subDays(new Date(), 30), 'yyyy-MM-dd'));
+    setEndDate(format(new Date(), 'yyyy-MM-dd'));
+  };
 
   const { data: analytics, isLoading } = useQuery({
     queryKey: ['analytics', startDate, endDate],
@@ -87,24 +104,113 @@ const AnalyticsPage: React.FC = () => {
 
   return (
     <Box>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
         <Typography variant="h4" fontWeight={700}>
           분석 및 리포트
         </Typography>
-        <TextField
-          select
-          label="기간"
-          value={period}
-          onChange={(e) => setPeriod(e.target.value)}
-          sx={{ minWidth: 150 }}
-        >
-          <MenuItem value="7">최근 7일</MenuItem>
-          <MenuItem value="30">최근 30일</MenuItem>
-          <MenuItem value="90">최근 3개월</MenuItem>
-          <MenuItem value="180">최근 6개월</MenuItem>
-          <MenuItem value="365">최근 1년</MenuItem>
-        </TextField>
       </Box>
+
+      {/* 필터 영역 */}
+      <Paper sx={{ p: 2, mb: 3 }}>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, alignItems: 'center' }}>
+          {/* 기간 검색 */}
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <SearchIcon color="action" />
+            <Typography variant="body2" color="text.secondary" sx={{ mr: 1 }}>
+              분석 기간
+            </Typography>
+            <TextField
+              type="date"
+              label="시작일"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              InputLabelProps={{ shrink: true }}
+              size="small"
+              sx={{ width: 160 }}
+              inputProps={{
+                max: endDate || undefined,
+              }}
+            />
+            <Typography variant="body2" color="text.secondary">
+              ~
+            </Typography>
+            <TextField
+              type="date"
+              label="종료일"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              InputLabelProps={{ shrink: true }}
+              size="small"
+              sx={{ width: 160 }}
+              inputProps={{
+                min: startDate || undefined,
+              }}
+            />
+            <Button
+              size="small"
+              onClick={handleClearDateRange}
+              startIcon={<ClearIcon />}
+              color="inherit"
+            >
+              초기화
+            </Button>
+          </Box>
+
+          {/* 빠른 기간 선택 */}
+          <Box sx={{ display: 'flex', gap: 1 }}>
+            <Button
+              size="small"
+              variant="outlined"
+              onClick={() => handleQuickDateRange(7)}
+              sx={{ minWidth: 'auto', px: 1.5 }}
+            >
+              최근 7일
+            </Button>
+            <Button
+              size="small"
+              variant="outlined"
+              onClick={() => handleQuickDateRange(30)}
+              sx={{ minWidth: 'auto', px: 1.5 }}
+            >
+              최근 30일
+            </Button>
+            <Button
+              size="small"
+              variant="outlined"
+              onClick={() => handleQuickDateRange(90)}
+              sx={{ minWidth: 'auto', px: 1.5 }}
+            >
+              최근 3개월
+            </Button>
+            <Button
+              size="small"
+              variant="outlined"
+              onClick={() => handleQuickDateRange(180)}
+              sx={{ minWidth: 'auto', px: 1.5 }}
+            >
+              최근 6개월
+            </Button>
+            <Button
+              size="small"
+              variant="outlined"
+              onClick={() => handleQuickDateRange(365)}
+              sx={{ minWidth: 'auto', px: 1.5 }}
+            >
+              최근 1년
+            </Button>
+          </Box>
+        </Box>
+
+        {/* 선택된 기간 표시 */}
+        <Box sx={{ display: 'flex', gap: 1, mt: 2, flexWrap: 'wrap' }}>
+          <Chip
+            label={`분석 기간: ${startDate} ~ ${endDate}`}
+            size="small"
+            color="primary"
+            variant="outlined"
+          />
+        </Box>
+      </Paper>
 
       <Grid container spacing={3} sx={{ mb: 3 }}>
         <Grid item xs={12} sm={6} md={3}>
@@ -113,7 +219,7 @@ const AnalyticsPage: React.FC = () => {
             value={`₩${(analytics?.totalRevenue || 0).toLocaleString()}`}
             icon={<AttachMoney />}
             color="#2e7d32"
-            subtitle="전체 기간"
+            subtitle={`${startDate} ~ ${endDate}`}
           />
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
@@ -122,7 +228,7 @@ const AnalyticsPage: React.FC = () => {
             value={(analytics?.totalReservations || 0).toLocaleString()}
             icon={<EventNote />}
             color="#1976d2"
-            subtitle="전체 기간"
+            subtitle={`${startDate} ~ ${endDate}`}
           />
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
@@ -131,7 +237,7 @@ const AnalyticsPage: React.FC = () => {
             value={(analytics?.totalRides || 0).toLocaleString()}
             icon={<DirectionsBus />}
             color="#ed6c02"
-            subtitle="전체 기간"
+            subtitle={`${startDate} ~ ${endDate}`}
           />
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
