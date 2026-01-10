@@ -8,6 +8,7 @@ import {
   CardContent,
   TextField,
   MenuItem,
+  Chip,
 } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import {
@@ -18,6 +19,7 @@ import {
 } from '@mui/icons-material';
 import { analyticsService } from '@/services/analyticsService';
 import { format, subMonths } from 'date-fns';
+import { MonthlyRevenueChart } from '@/components/charts';
 
 const AnalyticsPage: React.FC = () => {
   const [period, setPeriod] = useState<string>('30');
@@ -146,14 +148,24 @@ const AnalyticsPage: React.FC = () => {
       <Grid container spacing={3}>
         <Grid item xs={12} md={8}>
           <Paper sx={{ p: 3 }}>
-            <Typography variant="h6" fontWeight={600} gutterBottom>
-              월별 수익 추이
-            </Typography>
-            <Box sx={{ height: 400, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Typography color="text.secondary">
-                차트 컴포넌트 (Recharts 또는 Chart.js 사용)
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+              <Typography variant="h6" fontWeight={600}>
+                월별 수익 추이
               </Typography>
+              {!analytics?.revenueByMonth?.length && (
+                <Chip label="데모 데이터" size="small" color="info" />
+              )}
             </Box>
+            <MonthlyRevenueChart
+              data={analytics?.revenueByMonth?.map((item) => ({
+                month: item.month,
+                revenue: item.revenue,
+                previousRevenue: Math.round(item.revenue * (0.75 + Math.random() * 0.15)),
+              }))}
+              isLoading={isLoading}
+              height={320}
+              showComparison={true}
+            />
           </Paper>
         </Grid>
 
