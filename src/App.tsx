@@ -22,6 +22,7 @@ import MonitoringPage from '@/pages/monitoring/MonitoringPage';
 import InvoicesListPage from '@/pages/billing/InvoicesListPage';
 import InvoiceDetailPage from '@/pages/billing/InvoiceDetailPage';
 import AnalyticsPage from '@/pages/analytics/AnalyticsPage';
+import { SettingsPage } from '@/pages/settings';
 import { ROUTES } from '@/constants';
 
 const App: React.FC = () => {
@@ -78,6 +79,9 @@ const App: React.FC = () => {
 
         {/* Analytics */}
         <Route path="/analytics" element={<AnalyticsPage />} />
+
+        {/* Settings */}
+        <Route path="/settings" element={<SettingsPage />} />
       </Route>
 
       {/* Default redirect */}
