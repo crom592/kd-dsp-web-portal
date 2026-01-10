@@ -36,6 +36,7 @@ import { ROLE_DISPLAY_NAMES, ROUTES } from '@/constants';
 import { dashboardService } from '@/services/dashboardService';
 import { vehiclesService } from '@/services/vehiclesService';
 import GoogleMap from '@/components/map/GoogleMap';
+import { ReservationStatusChart } from '@/components/charts';
 
 interface StatCardProps {
   title: string;
@@ -452,64 +453,103 @@ const DashboardPage: React.FC = () => {
         </Grid>
       </Grid>
 
-      {/* Quick Stats */}
+      {/* Reservation Chart and Quick Stats */}
       <Grid container spacing={3} sx={{ mt: 1 }}>
-        <Grid item xs={12} md={4}>
-          <Paper sx={{ p: 3 }}>
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-            >
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                <People sx={{ color: 'primary.main' }} />
-                <Typography variant="body2">전체 탑승자</Typography>
-              </Box>
-              <Typography variant="h5" fontWeight={600}>
-                {(stats.totalRiders ?? 0).toLocaleString()}
+        <Grid item xs={12} md={8}>
+          <Paper sx={{ p: 2 }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+              <Typography variant="h6" fontWeight={600}>
+                예약 현황
               </Typography>
+              <Chip label="데모 데이터" size="small" color="info" />
             </Box>
+            <ReservationStatusChart
+              isLoading={isLoading}
+              height={280}
+              showDaily={true}
+            />
           </Paper>
         </Grid>
 
         <Grid item xs={12} md={4}>
-          <Paper sx={{ p: 3 }}>
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-            >
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                <TrendingUp sx={{ color: 'success.main' }} />
-                <Typography variant="body2">평균 탑승률</Typography>
+          <Paper sx={{ p: 2, height: '100%' }}>
+            <Typography variant="h6" fontWeight={600} gutterBottom>
+              Quick Stats
+            </Typography>
+            <Box sx={{ mt: 2 }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  py: 2,
+                  borderBottom: '1px solid',
+                  borderColor: 'divider',
+                }}
+              >
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                  <People sx={{ color: 'primary.main' }} />
+                  <Typography variant="body2">전체 탑승자</Typography>
+                </Box>
+                <Typography variant="h6" fontWeight={600}>
+                  {(stats.totalRiders ?? 0).toLocaleString()}
+                </Typography>
               </Box>
-              <Typography variant="h5" fontWeight={600}>
-                {stats.averageOccupancy ?? 0}%
-              </Typography>
-            </Box>
-          </Paper>
-        </Grid>
 
-        <Grid item xs={12} md={4}>
-          <Paper sx={{ p: 3 }}>
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-            >
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                <EventNote sx={{ color: 'secondary.main' }} />
-                <Typography variant="body2">내 역할</Typography>
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  py: 2,
+                  borderBottom: '1px solid',
+                  borderColor: 'divider',
+                }}
+              >
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                  <TrendingUp sx={{ color: 'success.main' }} />
+                  <Typography variant="body2">평균 탑승률</Typography>
+                </Box>
+                <Typography variant="h6" fontWeight={600}>
+                  {stats.averageOccupancy ?? 0}%
+                </Typography>
               </Box>
-              <Typography variant="h5" fontWeight={600}>
-                {user?.role ? ROLE_DISPLAY_NAMES[user.role] : 'N/A'}
-              </Typography>
+
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  py: 2,
+                  borderBottom: '1px solid',
+                  borderColor: 'divider',
+                }}
+              >
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                  <Route sx={{ color: 'warning.main' }} />
+                  <Typography variant="body2">운행 노선</Typography>
+                </Box>
+                <Typography variant="h6" fontWeight={600}>
+                  {stats.activeRoutes ?? 0}/{stats.totalRoutes ?? 0}
+                </Typography>
+              </Box>
+
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  py: 2,
+                }}
+              >
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                  <EventNote sx={{ color: 'secondary.main' }} />
+                  <Typography variant="body2">내 역할</Typography>
+                </Box>
+                <Typography variant="h6" fontWeight={600}>
+                  {user?.role ? ROLE_DISPLAY_NAMES[user.role] : 'N/A'}
+                </Typography>
+              </Box>
             </Box>
           </Paper>
         </Grid>
