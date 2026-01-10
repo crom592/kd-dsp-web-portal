@@ -49,11 +49,11 @@ const transformReservation = (backendRes: any): Reservation => ({
 export const reservationsService = {
   getReservations: async (params: GetReservationsParams): Promise<PaginatedResponse<Reservation>> => {
     const response = await api.get('/reservations', { params });
-    const backendData = response.data;
+    const backendData = response.data.data || response.data;
     const items = backendData.items || backendData.data || [];
     return {
       data: items.map(transformReservation),
-      meta: backendData.meta || {
+      meta: backendData.pagination || backendData.meta || {
         total: backendData.total || items.length || 0,
         page: params.page || 1,
         limit: params.limit || 10,
@@ -64,7 +64,8 @@ export const reservationsService = {
 
   getReservation: async (id: string): Promise<Reservation> => {
     const response = await api.get(`/reservations/${id}`);
-    return transformReservation(response.data);
+    const data = response.data.data || response.data;
+    return transformReservation(data);
   },
 
   cancelReservation: async (id: string): Promise<Reservation> => {
