@@ -6,6 +6,8 @@ interface GetInvoicesParams {
   limit?: number;
   status?: string;
   companyId?: string;
+  startDate?: string;
+  endDate?: string;
 }
 
 interface GetPaymentsParams {
