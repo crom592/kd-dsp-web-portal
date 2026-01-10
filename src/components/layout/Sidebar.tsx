@@ -8,7 +8,6 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Typography,
   Divider,
   useTheme,
   useMediaQuery,
@@ -159,17 +158,11 @@ const Sidebar: React.FC<SidebarProps> = ({ open, onClose, drawerWidth }) => {
           borderBottom: `1px solid ${theme.palette.divider}`,
         }}
       >
-        <Typography
-          variant="h6"
-          component="div"
-          sx={{
-            fontWeight: 700,
-            color: 'primary.main',
-            letterSpacing: '-0.5px',
-          }}
-        >
-          KD Mobility
-        </Typography>
+        <img
+          src="/kd-logo.svg"
+          alt="KD운송그룹"
+          style={{ height: 40, width: 'auto' }}
+        />
       </Box>
 
       {/* Main Navigation */}
