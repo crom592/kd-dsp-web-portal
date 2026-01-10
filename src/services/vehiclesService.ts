@@ -8,6 +8,36 @@ interface GetVehiclesParams {
   search?: string;
 }
 
+export interface VehicleMonitoringData {
+  id: string;
+  plateNumber: string;
+  currentLocation?: {
+    latitude: number;
+    longitude: number;
+  };
+  status: string;
+  speed?: number;
+  heading?: number;
+  routeName?: string;
+  routeId?: string;
+  driverName?: string;
+  driverId?: string;
+  nextStop?: string;
+  eta?: string;
+  fuelLevel?: number;
+  passengers?: number;
+  tripId?: string;
+  capacity: number;
+}
+
+export interface VehicleMonitoringResponse {
+  data: VehicleMonitoringData[];
+  total: number;
+  inService: number;
+  idle: number;
+  timestamp: string;
+}
+
 export const vehiclesService = {
   getVehicles: async (params: GetVehiclesParams): Promise<PaginatedResponse<Vehicle>> => {
     const response = await api.get('/vehicles', { params });
@@ -40,5 +70,14 @@ export const vehiclesService = {
 
   deleteVehicle: async (id: string): Promise<void> => {
     await api.delete(`/vehicles/${id}`);
+  },
+
+  /**
+   * 실시간 모니터링 데이터 조회
+   * 운행 중인 차량들의 위치, 노선, 기사 정보를 종합하여 반환
+   */
+  getMonitoringData: async (): Promise<VehicleMonitoringResponse> => {
+    const response = await api.get('/vehicles/monitoring');
+    return response.data.data || response.data;
   },
 };

@@ -26,7 +26,7 @@ import {
 } from '@mui/icons-material';
 import { useQuery } from '@tanstack/react-query';
 import GoogleMap from '@/components/map/GoogleMap';
-import { vehiclesService } from '@/services/vehiclesService';
+import { vehiclesService, VehicleMonitoringData } from '@/services/vehiclesService';
 
 interface VehicleLocation {
   id: string;
@@ -42,6 +42,29 @@ interface VehicleLocation {
   passengers?: number;
   heading?: number;
 }
+
+// Transform API data to VehicleLocation format
+const transformMonitoringData = (data: VehicleMonitoringData): VehicleLocation | null => {
+  if (!data.currentLocation) return null;
+
+  return {
+    id: data.id,
+    plateNumber: data.plateNumber,
+    position: {
+      lat: data.currentLocation.latitude,
+      lng: data.currentLocation.longitude,
+    },
+    status: data.status === 'IN_SERVICE' ? 'IN_SERVICE' : data.status === 'AVAILABLE' ? 'IDLE' : 'IDLE',
+    speed: data.speed || 0,
+    routeName: data.routeName,
+    driverName: data.driverName,
+    nextStop: data.nextStop,
+    eta: data.eta,
+    fuelLevel: data.fuelLevel,
+    passengers: data.passengers,
+    heading: data.heading,
+  };
+};
 
 // Mock data for demonstration - Seoul area vehicles
 const generateMockVehicles = (): VehicleLocation[] => [
@@ -136,10 +159,11 @@ const MonitoringPage: React.FC = () => {
   const [vehicleLocations, setVehicleLocations] = useState<VehicleLocation[]>([]);
   const [useMockData, setUseMockData] = useState(false);
 
-  const { data: vehicles, isLoading } = useQuery({
-    queryKey: ['vehicles', 'IN_SERVICE'],
-    queryFn: () => vehiclesService.getVehicles({ status: 'IN_SERVICE', limit: 100 }),
-    refetchInterval: 10000,
+  // Use the new monitoring API
+  const { data: monitoringData, isLoading } = useQuery({
+    queryKey: ['vehicles', 'monitoring'],
+    queryFn: () => vehiclesService.getMonitoringData(),
+    refetchInterval: 5000, // Refresh every 5 seconds
   });
 
   // Simulate vehicle movement for mock data
@@ -167,29 +191,33 @@ const MonitoringPage: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (vehicles?.data && vehicles.data.length > 0) {
-      const locations: VehicleLocation[] = vehicles.data
-        .filter((v) => v.currentLocation)
-        .map((v) => ({
+    if (monitoringData?.data && monitoringData.data.length > 0) {
+      // Transform API data to VehicleLocation format
+      const locations: VehicleLocation[] = monitoringData.data
+        .map(transformMonitoringData)
+        .filter((v): v is VehicleLocation => v !== null);
+
+      if (locations.length > 0) {
+        setVehicleLocations(locations);
+        setUseMockData(false);
+      } else {
+        // Vehicles exist but no location data - use mock data with real vehicle info
+        const mockWithRealInfo = monitoringData.data.map((v, index) => ({
+          ...generateMockVehicles()[index % generateMockVehicles().length],
           id: v.id,
           plateNumber: v.plateNumber,
-          position: {
-            lat: v.currentLocation!.latitude,
-            lng: v.currentLocation!.longitude,
-          },
-          status: 'IN_SERVICE' as const,
-          speed: Math.floor(Math.random() * 60) + 20,
-          routeName: '노선 정보 없음',
-          driverName: '기사 정보 없음',
+          routeName: v.routeName || '노선 정보 없음',
+          driverName: v.driverName || '기사 정보 없음',
         }));
-      setVehicleLocations(locations);
-      setUseMockData(false);
+        setVehicleLocations(mockWithRealInfo);
+        setUseMockData(true);
+      }
     } else if (!isLoading) {
       // Use mock data when no real data is available
       setVehicleLocations(generateMockVehicles());
       setUseMockData(true);
     }
-  }, [vehicles, isLoading]);
+  }, [monitoringData, isLoading]);
 
   // Animation loop for mock data movement simulation
   useEffect(() => {
