@@ -7,6 +7,8 @@ interface GetRoutesParams {
   status?: string;
   search?: string;
   companyId?: string;
+  startDate?: string;
+  endDate?: string;
 }
 
 export const routesService = {
