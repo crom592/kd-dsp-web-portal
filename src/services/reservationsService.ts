@@ -8,6 +8,8 @@ interface GetReservationsParams {
   routeId?: string;
   userId?: string;
   date?: string;
+  startDate?: string;
+  endDate?: string;
 }
 
 export const reservationsService = {
