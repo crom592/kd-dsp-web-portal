@@ -29,11 +29,11 @@ const transformRoute = (backendRoute: any): Route => ({
 export const routesService = {
   getRoutes: async (params: GetRoutesParams): Promise<PaginatedResponse<Route>> => {
     const response = await api.get('/routes', { params });
-    const backendData = response.data;
+    const backendData = response.data.data || response.data;
     const items = backendData.items || backendData.data || [];
     return {
       data: items.map(transformRoute),
-      meta: backendData.meta || {
+      meta: backendData.pagination || backendData.meta || {
         total: backendData.total || items.length || 0,
         page: params.page || 1,
         limit: params.limit || 10,
@@ -44,7 +44,8 @@ export const routesService = {
 
   getRoute: async (id: string): Promise<Route> => {
     const response = await api.get(`/routes/${id}`);
-    return transformRoute(response.data);
+    const data = response.data.data || response.data;
+    return transformRoute(data);
   },
 
   createRoute: async (data: Partial<Route>): Promise<Route> => {

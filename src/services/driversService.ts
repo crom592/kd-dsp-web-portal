@@ -37,7 +37,7 @@ const transformDriver = (backendDriver: any): Driver => {
 export const driversService = {
   getDrivers: async (params: GetDriversParams): Promise<PaginatedResponse<Driver>> => {
     const response = await api.get('/drivers', { params });
-    const backendData = response.data;
+    const backendData = response.data.data || response.data;
     const items = backendData.items || backendData.data || [];
     return {
       data: items.map(transformDriver),
@@ -52,7 +52,8 @@ export const driversService = {
 
   getDriver: async (id: string): Promise<Driver> => {
     const response = await api.get(`/drivers/${id}`);
-    return transformDriver(response.data);
+    const data = response.data.data || response.data;
+    return transformDriver(data);
   },
 
   createDriver: async (data: Partial<Driver>): Promise<Driver> => {

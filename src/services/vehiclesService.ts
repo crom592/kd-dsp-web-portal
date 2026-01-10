@@ -66,11 +66,11 @@ const transformVehicle = (backendVehicle: any): Vehicle => {
 export const vehiclesService = {
   getVehicles: async (params: GetVehiclesParams): Promise<PaginatedResponse<Vehicle>> => {
     const response = await api.get('/vehicles', { params });
-    const backendData = response.data;
+    const backendData = response.data.data || response.data;
     const items = backendData.items || backendData.data || [];
     return {
       data: items.map(transformVehicle),
-      meta: backendData.meta || {
+      meta: backendData.pagination || backendData.meta || {
         total: backendData.total || items.length || 0,
         page: params.page || 1,
         limit: params.limit || 10,
@@ -81,7 +81,8 @@ export const vehiclesService = {
 
   getVehicle: async (id: string): Promise<Vehicle> => {
     const response = await api.get(`/vehicles/${id}`);
-    return transformVehicle(response.data);
+    const data = response.data.data || response.data;
+    return transformVehicle(data);
   },
 
   createVehicle: async (data: Partial<Vehicle>): Promise<Vehicle> => {
